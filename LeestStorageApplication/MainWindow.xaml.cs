@@ -22,7 +22,11 @@ namespace LeestStorageApplication
     {
         public MainWindow()
         {
+
+            Client client = new Client(25565);
+
             InitializeComponent();
+            
         }
     }
 }
