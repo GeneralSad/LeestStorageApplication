@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 using System.Threading;
 using CommunicationObjects;
 
@@ -34,7 +35,8 @@ namespace LeestStorageServer
             {
                 try
                 {
-                    string message = await client.Read();
+                    string message = JsonConverter.DeserializeObject(await client.Read());
+
                     Console.WriteLine(message);
                 } catch (Exception e)
                 {
