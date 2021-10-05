@@ -14,7 +14,7 @@ namespace LeestStorageServer
     {
         private TcpListener listener;
         private List<ClientHandler> clients;
-        private int port;
+
         private bool running { get; set; }
 
 
@@ -27,7 +27,7 @@ namespace LeestStorageServer
         public async Task Start()
         {
             this.listener.Start();
-            Console.WriteLine($"Server is listening fort clients on port {this.port}.");
+            Console.WriteLine($"Server is listening fort clients on port {ServerAddress.port}.");
             this.running = true;
 
             while (this.running)
