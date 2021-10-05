@@ -1,4 +1,4 @@
-﻿<Window x:Class="LeestStorageApplication.MainWindow"
+﻿<Window x:Name="Window" x:Class="LeestStorageApplication.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,16 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
-    <StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Button Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button Content="Download" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button Content="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-            <Button Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-            <Button Content="Info" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+    <StackPanel x:Name="MainPanel">
+        <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Button x:Name="ReloadButton" Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="DownloadButton" Content="Download" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="UploadButton" Content="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="DeleteButton" Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="InfoButton" Content="Info" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
         </StackPanel>
-        <StackPanel Height="100" Orientation="Horizontal">
-            <ListView Height="100" ItemsSource="{Binding Items}">
+        <StackPanel x:Name="ContentStackPanel" Orientation="Horizontal" HorizontalAlignment="Stretch">
+            <ListView x:Name="DirectoryListView" ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}" Width="710">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -25,9 +25,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel Width="100">
-                <Label Content="Label"/>
-                <TextBlock Text="TextBlock" TextWrapping="Wrap"/>
+            <StackPanel x:Name="InfoPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                <Label x:Name="NameLabel" Content="{Binding Item}"/>
+                <TextBlock x:Name="MoreInfoBlock" Text="{Binding Item}" TextWrapping="Wrap"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>
