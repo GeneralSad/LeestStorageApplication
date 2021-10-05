@@ -6,8 +6,29 @@
         xmlns:local="clr-namespace:LeestStorageApplication"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Window.DataContext>
-        <local:ViewModel/>
-    </Window.DataContext>
-    <Grid/>
+
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Button Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Button Content="Download" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Button Content="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button Content="Info" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+        </StackPanel>
+        <StackPanel Height="100" Orientation="Horizontal">
+            <ListView Height="100" ItemsSource="{Binding Items}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Label Content="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackPanel Width="100">
+                <Label Content="Label"/>
+                <TextBlock Text="TextBlock" TextWrapping="Wrap"/>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
 </Window>
