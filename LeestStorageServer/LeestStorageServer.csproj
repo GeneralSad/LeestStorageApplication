@@ -8,6 +8,7 @@
   <Import Project="..\CommunicationObjects\CommunicationObjects.projitems" Label="Shared" />
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
   </ItemGroup>
 

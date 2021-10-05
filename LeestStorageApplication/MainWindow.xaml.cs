@@ -17,8 +17,6 @@ namespace LeestStorageApplication
         public MainWindow()
         {
 
-            //Client client = new Client(25565);
-
             Folder folder1 = new Folder("hell", null);
             Folder folder2 = new Folder("yeah", folder1);
             Folder folder3 = new Folder("naw", folder1);
