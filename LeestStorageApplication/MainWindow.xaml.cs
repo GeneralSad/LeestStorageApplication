@@ -32,9 +32,24 @@ namespace LeestStorageApplication
             Debug.WriteLine("File 2: " + file2.getFilePath());
             Debug.WriteLine("File 3: " + file3.getFilePath());
 
+
+            List<Item> Items = new List<Item>{
+                new Item{Name= "Hell", Path=folder1.getFilePath()},
+                new Item{Name= "Yeah", Path=folder2.getFilePath()},
+                new Item{Name= "Naw", Path=folder3.getFilePath()},
+                new Item{Name= "ThatsRad.txt", Path=file3.getFilePath()}
+            };
+
             CommunicationHandler handler = new CommunicationHandler();
             InitializeComponent();
             
         }
     }
+
+    class Item
+    {
+        public string Name { get; set; }
+        public string Path { get; set; }
+    }
+
 }
