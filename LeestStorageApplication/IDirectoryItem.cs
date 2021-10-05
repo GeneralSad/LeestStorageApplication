@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LeestStorageApplication
 {
-    interface IDirectoryItem
+    public interface IDirectoryItem
     {
 
         public string name { get; set; }

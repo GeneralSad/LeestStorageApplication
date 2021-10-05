@@ -5,6 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace LeestStorageApplication
 {
@@ -12,10 +16,11 @@ namespace LeestStorageApplication
     public class ViewModel : INotifyPropertyChanged
     {
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private List<Item> items;
+
+        private Item mSelectedItem = null;
 
         public ViewModel()
         {
@@ -57,6 +62,21 @@ namespace LeestStorageApplication
             }
         }
 
+        public Item SelectedItem
+        {
+            get { return mSelectedItem; }
+            set
+            {
+                if (mSelectedItem!= value)
+                {
+                    if (mSelectedItem == null)
+                    {
+                        mSelectedItem = new Item();
+                    }
+                    mSelectedItem = value;
+                }
+            }
+        }
 
     }
 
@@ -64,6 +84,13 @@ namespace LeestStorageApplication
     {
         public string Name { get; set; }
         public string Path { get; set; }
+        public string DetailInfo
+        {
+            get
+            {
+                return "Path: " + Path;
+            }
+        }
     }
 
 }
