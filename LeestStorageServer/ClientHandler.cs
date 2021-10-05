@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
+using CommunicationObjects;
 
 namespace LeestStorageServer
 {
-    class ClientHandler
+    class ClientHandler : MessageCallback
     {
         private TcpClient tcpClient;
         private Client client;
@@ -22,6 +20,11 @@ namespace LeestStorageServer
             this.client = new Client(tcpClient);
 
             new Thread(Run).Start();
+        }
+
+        public void sendMessage(string message)
+        {
+            this.client.Write(message);
         }
 
         private async void Run()
@@ -38,13 +41,17 @@ namespace LeestStorageServer
                     Debug.WriteLine(e.ToString());
                 }
             }
-            client.terminate();
+            client.Terminate();
         }
 
-        private void disable()
+        public void Disable()
         {
             this.running = false;
         }
 
+        public void MessageReceived(string message)
+        {
+            
+        }
     }
 }
