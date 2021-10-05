@@ -10,6 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunicationObjects;
 using LeestStorageServer;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LeestStorageApplication
 {
@@ -23,12 +25,11 @@ namespace LeestStorageApplication
         public CommunicationHandler()
         {
             this.tcpClient = new TcpClient();
-            
 
             new Thread(Run).Start();
         }
 
-        public void sendMessage(string message)
+        public void SendMessage(string message)
         {
             this.client.Write(message);
         }
@@ -46,6 +47,9 @@ namespace LeestStorageApplication
                 try
                 {
                     string message = await client.Read();
+                    JObject jMessage = (JObject)JsonConvert.DeserializeObject(message);
+                    
+                    handleMessage(jMessage);
                     Console.WriteLine(message);
                 }
                 catch (Exception e)
@@ -54,6 +58,20 @@ namespace LeestStorageApplication
                 }
             }
             client.Terminate();
+        }
+
+        private void handleMessage(JObject jMessage)
+        {
+            switch (jMessage.Value<string>("type"))
+            {
+                case "Directory":
+                    Debug.WriteLine("received Directory");
+                    break;
+                case "File":
+                    Console.WriteLine("Received file");
+                    break;
+
+            }
         }
 
         public void Disable()

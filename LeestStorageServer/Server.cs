@@ -39,6 +39,7 @@ namespace LeestStorageServer
                     TcpClient client = await this.listener.AcceptTcpClientAsync().ConfigureAwait(false);
                     Console.WriteLine($"A new client connected: {client}");
                     this.clients.Add(new ClientHandler(client));
+
                 } catch (Exception e)
                 {
                     Debug.WriteLine(e.ToString());

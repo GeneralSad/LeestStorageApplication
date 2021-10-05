@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace LeestStorageServer
 {
@@ -30,18 +31,23 @@ namespace LeestStorageServer
             return ret;
         }
 
-        public void Write(string message)
+        public void Write(Object message)
         {
             try
             {
 
-                stream.Write(WrapMessage(Encoding.ASCII.GetBytes(message)));
+                stream.Write(WrapMessage(Encoding.ASCII.GetBytes(ToJsonMessage(message))));
                 stream.Flush();
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
             }
+        }
+
+        public static string ToJsonMessage<T>( T t)
+        {
+            return JsonConvert.SerializeObject(t); 
         }
 
         public async Task<string> Read()

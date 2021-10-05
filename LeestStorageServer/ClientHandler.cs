@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Text.Json.Serialization;
 using System.Threading;
 using CommunicationObjects;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LeestStorageServer
 {
@@ -30,12 +32,17 @@ namespace LeestStorageServer
 
         private async void Run()
         {
+            var o = new {type = "Directory"};
+            this.client.Write(o);
             this.running = true;
             while (running)
             {
                 try
                 {
-                    string message = JsonConverter.DeserializeObject(await client.Read());
+                    string message = await client.Read();
+                    JObject jMessage = (JObject)JsonConvert.DeserializeObject(message);
+
+                    handleMessage(jMessage);
 
                     Console.WriteLine(message);
                 } catch (Exception e)
@@ -44,6 +51,20 @@ namespace LeestStorageServer
                 }
             }
             client.Terminate();
+        }
+
+        private void handleMessage(JObject jMessage)
+        {
+            switch (jMessage.Value<string>("type"))
+            {
+                case "DirectoryRequest":
+                    Console.WriteLine("Send Updated Directory");
+                    break;
+                case "FileRequest":
+                    Console.WriteLine("Start sending File");
+                    break;
+
+            }
         }
 
         public void Disable()
