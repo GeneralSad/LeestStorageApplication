@@ -6,4 +6,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <Import Project="..\CommunicationObjects\CommunicationObjects.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="6.5.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
