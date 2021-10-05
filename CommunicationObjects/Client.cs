@@ -50,7 +50,7 @@ namespace LeestStorageServer
             return JsonConvert.SerializeObject(t); 
         }
 
-        public async Task<string> Read()
+        public async Task<byte[]> Read()
         {
             byte[] length = new byte[4];
             this.stream.Read(length, 0, 4);
@@ -67,7 +67,7 @@ namespace LeestStorageServer
                 //Console.WriteLine("ReadMessage: " + read);
             }
 
-            return Encoding.ASCII.GetString(received);
+            return received;
         }
 
         public void Terminate()

@@ -46,10 +46,10 @@ namespace LeestStorageApplication
             {
                 try
                 {
-                    string message = await client.Read();
+                    string message = Encoding.ASCII.GetString((await client.Read()));
                     JObject jMessage = (JObject)JsonConvert.DeserializeObject(message);
                     
-                    handleMessage(jMessage);
+                    await handleMessage(jMessage);
                     Console.WriteLine(message);
                 }
                 catch (Exception e)
@@ -60,7 +60,7 @@ namespace LeestStorageApplication
             client.Terminate();
         }
 
-        private void handleMessage(JObject jMessage)
+        private async Task handleMessage(JObject jMessage)
         {
             switch (jMessage.Value<string>("type"))
             {

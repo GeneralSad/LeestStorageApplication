@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
-using System.Text.Json.Serialization;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using CommunicationObjects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -39,10 +41,10 @@ namespace LeestStorageServer
             {
                 try
                 {
-                    string message = await client.Read();
+                    string message = Encoding.ASCII.GetString(await this.client.Read());
                     JObject jMessage = (JObject)JsonConvert.DeserializeObject(message);
 
-                    handleMessage(jMessage);
+                    await handleMessage(jMessage);
 
                     Console.WriteLine(message);
                 } catch (Exception e)
@@ -50,10 +52,10 @@ namespace LeestStorageServer
                     Debug.WriteLine(e.ToString());
                 }
             }
-            client.Terminate();
+            this.client.Terminate();
         }
 
-        private void handleMessage(JObject jMessage)
+        private async Task handleMessage(JObject jMessage)
         {
             switch (jMessage.Value<string>("type"))
             {
@@ -62,6 +64,11 @@ namespace LeestStorageServer
                     break;
                 case "FileRequest":
                     Console.WriteLine("Start sending File");
+                    break;
+                case "FileUploadRequest":
+                    Console.WriteLine("Start receiving File");
+                    //The code below is placeholder, might even break something :)
+                    await FileOperation.FileFromByteArray( Environment.CurrentDirectory + @"//file", await this.client.Read());
                     break;
 
             }
