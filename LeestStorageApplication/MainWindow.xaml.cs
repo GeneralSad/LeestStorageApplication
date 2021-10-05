@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using LeestStorageServer;
 
 namespace LeestStorageApplication
 {
@@ -22,9 +11,7 @@ namespace LeestStorageApplication
     {
         public MainWindow()
         {
-
-            Client client = new Client(25565);
-
+            CommunicationHandler handler = new CommunicationHandler();
             InitializeComponent();
             
         }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.Threading;
+using CommunicationObjects;
 
 namespace LeestStorageServer
 {
-    class ClientHandler
+    class ClientHandler : MessageCallback
     {
         private TcpClient tcpClient;
         private Client client;
@@ -48,5 +49,9 @@ namespace LeestStorageServer
             this.running = false;
         }
 
+        public void MessageReceived(string message)
+        {
+            
+        }
     }
 }

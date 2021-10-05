@@ -1,27 +1,27 @@
 ﻿using System;
-using
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunicationObjects;
 using LeestStorageServer;
 
 namespace LeestStorageApplication
 {
-    class CommunicationHandler
+    class CommunicationHandler : MessageCallback
     {
         private TcpClient tcpClient;
         private Client client;
         private bool running { get; set; }
 
 
-        public CommunicationHandler(TcpClient tcpClient)
+        public CommunicationHandler()
         {
-            this.tcpClient = tcpClient;
-            this.client = new Client(tcpClient);
+            this.tcpClient = new TcpClient();
 
             new Thread(Run).Start();
         }
@@ -33,6 +33,11 @@ namespace LeestStorageApplication
 
         private async void Run()
         {
+
+            await tcpClient.ConnectAsync(ServerAddress.IpAddress, ServerAddress.port);
+
+            this.client = new Client(tcpClient);
+
             this.running = true;
             while (running)
             {
@@ -54,5 +59,9 @@ namespace LeestStorageApplication
             this.running = false;
         }
 
+        public void MessageReceived(string message)
+        {
+            
+        }
     }
 }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using CommunicationObjects;
 
 namespace LeestStorageServer
 {
@@ -16,14 +18,13 @@ namespace LeestStorageServer
         private bool running { get; set; }
 
 
-        public Server(int port)
+        public Server()
         {
-            this.port = port;
             this.clients = new List<ClientHandler>();
-            this.listener = new TcpListener(System.Net.IPAddress.Any, port);
+            this.listener = new TcpListener(ServerAddress.IpAddress, ServerAddress.port);
         }
 
-        public async void Start()
+        public async Task Start()
         {
             this.listener.Start();
             Console.WriteLine($"Server is listening fort clients on port {this.port}.");
@@ -36,11 +37,11 @@ namespace LeestStorageServer
                 try
                 {
                     TcpClient client = await this.listener.AcceptTcpClientAsync().ConfigureAwait(false);
+                    Console.WriteLine($"A new client connected: {client}");
                     this.clients.Add(new ClientHandler(client));
                 } catch (Exception e)
                 {
                     Debug.WriteLine(e.ToString());
-
                 }
 
             }

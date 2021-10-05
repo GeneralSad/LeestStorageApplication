@@ -10,5 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MessageCallback.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerAddress.cs" />
   </ItemGroup>
 </Project>
