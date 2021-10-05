@@ -48,8 +48,12 @@ namespace LeestStorageServer
             this.listener.Stop();
         }
 
-        private void disable()
+        public void Disable()
         {
+            foreach (ClientHandler client in clients)
+            {
+                client.Disable();
+            }
             this.running = false;
         }
     }

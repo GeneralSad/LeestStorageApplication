@@ -30,11 +30,12 @@ namespace LeestStorageServer
             return ret;
         }
 
-        public void Write(byte[] message)
+        public void Write(string message)
         {
             try
             {
-                stream.Write(WrapMessage(message));
+
+                stream.Write(WrapMessage(Encoding.ASCII.GetBytes(message)));
                 stream.Flush();
             }
             catch (Exception e)
@@ -63,7 +64,7 @@ namespace LeestStorageServer
             return Encoding.ASCII.GetString(received);
         }
 
-        public void terminate()
+        public void Terminate()
         {
             this.stream.Close();
             this.stream.Dispose();
