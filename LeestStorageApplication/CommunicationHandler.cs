@@ -29,9 +29,9 @@ namespace LeestStorageApplication
             new Thread(Run).Start();
         }
 
-        public void SendMessage(object message)
+        public async Task SendMessage(object message)
         {
-            this.client.Write(message);
+           await this.client.Write(message);
         }
 
         private async void Run()
@@ -40,7 +40,7 @@ namespace LeestStorageApplication
             await tcpClient.ConnectAsync(ServerAddress.IpAddress, ServerAddress.port);
 
             this.client = new Client(tcpClient);
-            this.SendMessage(new { type = "FileRequest" });
+            await this.SendMessage(new { type = "FileRequest" });
 
             this.running = true;
             while (running)
@@ -66,7 +66,12 @@ namespace LeestStorageApplication
             switch (jMessage.Value<string>("type"))
             {
                 case "Directory":
+                    foreach (string file in jMessage.Value<JArray>("files"))
+                    {
+                        Debug.WriteLine(file.Substring(file.LastIndexOf(@"\") + 1));
+                    }
                     Debug.WriteLine("received Directory");
+
                     break;
                 case "File":
                     await FileOperation.FileFromByteArray(@"C:\File\KrakenSetup.exe", await this.client.Read());

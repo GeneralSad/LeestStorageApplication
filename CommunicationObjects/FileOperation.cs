@@ -17,5 +17,15 @@ namespace CommunicationObjects
         {
             return await File.ReadAllBytesAsync(FilePath);
         }
+
+        public static string GetProjectDirectory()
+        {
+            return Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+        }
+        // @"\FilesForTransfer"
+        public static string[] ReturnFilesFromDirectory(string directory)
+        {
+            return Directory.GetFileSystemEntries(directory);
+        }
     }
 }

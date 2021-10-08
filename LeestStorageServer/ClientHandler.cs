@@ -27,15 +27,16 @@ namespace LeestStorageServer
             new Thread(Run).Start();
         }
 
-        public void sendMessage(string message)
+        public async Task sendMessage(string message)
         {
-            this.client.Write(message);
+            await this.client.Write(message);
         }
 
         private async void Run()
         {
-            var o = new {type = "Directory"};
-            this.client.Write(o);
+            String[] files = FileOperation.ReturnFilesFromDirectory(FileOperation.GetProjectDirectory() + @"\FilesForTransfer");
+            var o = new {type = "Directory", files = files};
+            await this.client.Write(o);
             this.running = true;
             while (running)
             {
@@ -64,7 +65,7 @@ namespace LeestStorageServer
                     break;
                 case "FileRequest":
                     Console.WriteLine("Start sending File");
-                    this.client.Write(new {type = "File"});
+                    await this.client.Write(new {type = "File"});
                     byte[] fileToByteArray = await FileOperation.FileToByteArray(@"E:\download\GitKrakenSetup.exe");
                     this.client.Write(fileToByteArray);
                     break;
