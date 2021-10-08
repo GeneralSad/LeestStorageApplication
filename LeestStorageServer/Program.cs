@@ -11,10 +11,10 @@ namespace LeestStorageServer
             Server server = new Server();
             await server.Start();
 
-            //byte[] fileToByteArray = await FileOperation.FileToByteArray(@"D:\Programs\Fortnite 3\Nioh\archive\archive_10.lnk");
+             //byte[] fileToByteArray = await FileOperation.FileToByteArray(@"E:\download\GitKrakenSetup.exe");
 
             //Console.WriteLine(fileToByteArray.Length);
-            //await FileOperation.FileFromByteArray(@"C:\File\archive.lnk", fileToByteArray);
+            //await FileOperation.FileFromByteArray(@"C:\File\KrakenSetup.exe", fileToByteArray);
         }
     }
 }

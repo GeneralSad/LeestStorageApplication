@@ -64,6 +64,9 @@ namespace LeestStorageServer
                     break;
                 case "FileRequest":
                     Console.WriteLine("Start sending File");
+                    this.client.Write(new {type = "File"});
+                    byte[] fileToByteArray = await FileOperation.FileToByteArray(@"E:\download\GitKrakenSetup.exe");
+                    this.client.Write(fileToByteArray);
                     break;
                 case "FileUploadRequest":
                     Console.WriteLine("Start receiving File");

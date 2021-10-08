@@ -16,7 +16,7 @@ namespace LeestStorageApplication
     {
         public MainWindow()
         {
-
+            /*
             Folder folder1 = new Folder("hell", null);
             Folder folder2 = new Folder("yeah", folder1);
             Folder folder3 = new Folder("naw", folder1);
@@ -37,8 +37,10 @@ namespace LeestStorageApplication
                 new Item{Name= "Naw", Path=folder3.getFilePath()},
                 new Item{Name= "ThatsRad.txt", Path=file3.getFilePath()}
             };
+            */
 
             CommunicationHandler handler = new CommunicationHandler();
+            
             InitializeComponent();
             
         }

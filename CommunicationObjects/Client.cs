@@ -45,6 +45,20 @@ namespace LeestStorageServer
             }
         }
 
+        public void Write(byte[] message)
+        {
+            try
+            {
+
+                stream.Write(WrapMessage(message));
+                stream.Flush();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
         public static string ToJsonMessage<T>( T t)
         {
             return JsonConvert.SerializeObject(t); 

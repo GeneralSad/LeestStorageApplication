@@ -15,20 +15,7 @@ namespace CommunicationObjects
 
         public static async Task<byte[]> FileToByteArray(string FilePath)
         {
-
-            FileStream stream = File.OpenRead(FilePath);
-            byte[] fileByteArray = new byte[stream.Length];
-
-            long size = stream.Length;
-            int bytesRead = 0;
-
-            while (bytesRead < size)
-            {
-                int read = await stream.ReadAsync(fileByteArray, bytesRead, fileByteArray.Length - bytesRead);
-                bytesRead += read;
-            }
-
-            return fileByteArray;
+            return await File.ReadAllBytesAsync(FilePath);
         }
     }
 }
