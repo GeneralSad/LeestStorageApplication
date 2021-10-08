@@ -4,27 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LeestStorageApplication"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="MainWindow" MinWidth="600" MinHeight="400" ResizeMode="CanMinimize" Width="800" Height="400">
+        Title="MainWindow"
+        MinWidth="600"
+        MinHeight="400"
+        ResizeMode="CanMinimize"
+        Width="800"
+        Height="400">
+
+    <Window.DataContext>
+        <local:ViewModel/>
+    </Window.DataContext>
 
     <StackPanel x:Name="MainPanel">
         <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Button x:Name="ReloadButton" Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="DownloadButton" Content="Download" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="UploadButton" Content="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="DeleteButton" Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="InfoButton" Content="Info" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="ReloadButton" Command="{Binding cReload}" Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="DownloadButton" Command="{Binding cDownload}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Download" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="UploadButton" Command="{Binding cUpload}" Content="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="DeleteButton" Command="{Binding cDelete}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="InfoButton" Command="{Binding cMoreInfo}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="More Info" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
         </StackPanel>
         <StackPanel x:Name="ContentStackPanel" Orientation="Horizontal" HorizontalAlignment="Stretch">
-
-
-
             <ListView x:Name="DirectoryListView" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" MinWidth="400" MinHeight="300" HorizontalContentAlignment="Left">
+                <ListView.InputBindings>
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding cEnterFile}" CommandParameter="{Binding ElementName=DirectoryListView}"/>
+                </ListView.InputBindings>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
                             <Label Content="{Binding Name}"/>
-                            <Button Content="Jump in" Click="Button_Click"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
