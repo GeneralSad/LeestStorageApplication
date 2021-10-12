@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LeestStorageServer
 {
-    class ClientHandler : MessageCallback
+    class ClientHandler
     {
         private TcpClient tcpClient;
         private Client client;
@@ -34,6 +34,8 @@ namespace LeestStorageServer
         {
             await this.client.Write(message);
         }
+
+
 
         private async void Run()
         {
@@ -71,9 +73,11 @@ namespace LeestStorageServer
                     break;
                 case "FileRequest":
                     Console.WriteLine("Start sending File");
-                    await this.client.Write(new {type = "File"});
-                    byte[] fileToByteArray = await FileOperation.FileToByteArray(@"E:\download\GitKrakenSetup.exe");
-                    this.client.Write(fileToByteArray);
+                    string fileName = jMessage.Value<String>("fileName");
+
+                    byte[] fileToByteArray = await FileOperation.FileToByteArray(this.fileOperation.CurrentDirectoryLayer + @"\" + fileName);
+                    await this.client.Write(new {type = "DirectoryFile", fileName});
+                    await this.client.Write(fileToByteArray);
                     break;
                 case "FileUploadRequest":
                     Console.WriteLine("Start receiving File");
@@ -87,11 +91,6 @@ namespace LeestStorageServer
         public void Disable()
         {
             this.running = false;
-        }
-
-        public void MessageReceived(string message)
-        {
-            
         }
     }
 }

@@ -13,10 +13,11 @@ using CommunicationObjects;
 using LeestStorageServer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syroot.Windows.IO;
 
 namespace LeestStorageApplication
 {
-    class CommunicationHandler : MessageCallback
+    class CommunicationHandler
     {
         private TcpClient tcpClient;
         private Client client;
@@ -36,6 +37,18 @@ namespace LeestStorageApplication
            await this.client.Write(message);
         }
 
+        public async Task Reload()
+        {
+            await this.client.Write(new { type = "DirectoryRequest" });
+            Debug.WriteLine("Reloaded");
+        }
+
+        public async Task DownloadRequest(string fileName)
+        {
+            await this.client.Write(new { type = "FileRequest", fileName});
+            Debug.WriteLine("Download: " + fileName);
+        }
+
         private async void Run()
         {
 
@@ -43,6 +56,7 @@ namespace LeestStorageApplication
 
             this.client = new Client(tcpClient);
 
+            await this.Reload();
             this.running = true;
             while (running)
             {
@@ -52,7 +66,7 @@ namespace LeestStorageApplication
                     JObject jMessage = (JObject)JsonConvert.DeserializeObject(message);
                     
                     await handleMessage(jMessage);
-                    Console.WriteLine(message);
+                    Console.WriteLine("Received: " + message);
                 }
                 catch (Exception e)
                 {
@@ -89,7 +103,10 @@ namespace LeestStorageApplication
 
                     break;
                 case "DirectoryFile":
-                    await FileOperation.FileFromByteArray(@"C:\DirectoryFile\KrakenSetup.exe", await this.client.Read());
+                    string downloadLocation = new KnownFolder(KnownFolderType.Downloads).Path + @"\" +
+                                              jMessage.Value<String>("fileName");
+                    Debug.WriteLine("Downloading to: " + downloadLocation);
+                    await FileOperation.FileFromByteArray(downloadLocation, await this.client.Read());
                     Console.WriteLine("Received file");
                     break;
 
@@ -101,9 +118,5 @@ namespace LeestStorageApplication
             this.running = false;
         }
 
-        public void MessageReceived(string message)
-        {
-            
-        }
     }
 }

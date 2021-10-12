@@ -73,15 +73,14 @@ namespace LeestStorageApplication
 
         public async void Reload(object parameter)
         {
-            await handler.SendMessage(new { type = "DirectoryRequest" } );
-            Debug.WriteLine("Reloaded");
+           await this.handler.Reload();
         }
 
-        public void Download(object parameter)
+        public async void Download(object parameter)
         {
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
-            Debug.WriteLine("Download: " + number);
+            await this.handler.DownloadRequest(this.Items[number].Name);
         }
 
         public void Upload(object parameter)

@@ -45,13 +45,13 @@ namespace LeestStorageServer
             }
         }
 
-        public void Write(byte[] message)
+        public async Task Write(byte[] message)
         {
             try
             {
 
-                stream.Write(WrapMessage(message));
-                stream.Flush();
+                await stream.WriteAsync(WrapMessage(message));
+                await stream.FlushAsync();
             }
             catch (Exception e)
             {

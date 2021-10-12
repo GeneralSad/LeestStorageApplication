@@ -14,7 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\DirectoryFolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileOperation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\IDirectoryItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MessageCallback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerAddress.cs" />
   </ItemGroup>
   <ItemGroup>
