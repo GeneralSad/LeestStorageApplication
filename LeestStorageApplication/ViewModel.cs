@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -15,7 +16,7 @@ using System.Windows.Input;
 namespace LeestStorageApplication
 {
 
-    public class ViewModel : BindableBase, INotifyPropertyChanged
+    public class ViewModel : BindableBase, INotifyPropertyChanged, ItemListCallback
     {
 
         public DelegateCommand<object> cReload { get; private set; }
@@ -25,12 +26,14 @@ namespace LeestStorageApplication
         public DelegateCommand<object> cMoreInfo { get; private set; }
         public DelegateCommand<object> cEnterFile { get; private set; }
 
-        public List<Item> Items { get; set; }
+        public ObservableCollection<IDirectoryItem> Items { get; set; }
 
-        private Item mSelectedItem = null;
+        private IDirectoryItem mSelectedItem = null;
 
         public ViewModel()
         {
+            CommunicationHandler handler = new CommunicationHandler(this);
+
             cReload = new DelegateCommand<object>(Reload, canSubmit);
             cDownload = new DelegateCommand<object>(Download, canSubmit);
             cUpload = new DelegateCommand<object>(Upload, canSubmit);
@@ -38,37 +41,33 @@ namespace LeestStorageApplication
             cMoreInfo = new DelegateCommand<object>(MoreInfo, canSubmit);
             cEnterFile = new DelegateCommand<object>(EnterFile, canSubmit);
 
-            Folder folder1 = new Folder("hell", null);
-            Folder folder2 = new Folder("yeah", folder1);
-            Folder folder3 = new Folder("naw", folder1);
-            Folder folder4 = new Folder("man", folder2);
+            //Folder folder1 = new Folder("hell", null);
+            //Folder folder2 = new Folder("yeah", folder1);
+            //Folder folder3 = new Folder("naw", folder1);
+            //Folder folder4 = new Folder("man", folder2);
 
-            File file1 = new File("ThatsRad.txt", folder2); //Hell/Yeah
-            File file2 = new File("ThatsNotSoRad.txt", folder3); //Hell/Naw
-            File file3 = new File("ThatsRad.txt", folder4); //Hell/Yeah/Man
+            //File file1 = new File("ThatsRad.txt", folder2); //Hell/Yeah
+            //File file2 = new File("ThatsNotSoRad.txt", folder3); //Hell/Naw
+            //File file3 = new File("ThatsRad.txt", folder4); //Hell/Yeah/Man
 
-            Debug.WriteLine("File 1: " + file1.GetFilePath());
-            Debug.WriteLine("File 2: " + file2.GetFilePath());
-            Debug.WriteLine("File 3: " + file3.GetFilePath());
+            //Debug.WriteLine("File 1: " + file1.GetFilePath());
+            //Debug.WriteLine("File 2: " + file2.GetFilePath());
+            //Debug.WriteLine("File 3: " + file3.GetFilePath());
 
-            Items = new List<Item>();
-            Items.Add(new Item { Name = "Hell", Path = folder1.GetFilePath() });
-            Items.Add(new Item { Name = "Yeah", Path = folder2.GetFilePath() });
-            Items.Add(new Item { Name = "Naw", Path = folder3.GetFilePath() });
-            Items.Add(new Item { Name = "ThatsRad.txt", Path = file3.GetFilePath() });
+            Items = new ObservableCollection<IDirectoryItem>();
+            //Items.Add(new Item { Name = "Hell", Path = folder1.GetFilePath() });
+            //Items.Add(new Item { Name = "Yeah", Path = folder2.GetFilePath() });
+            //Items.Add(new Item { Name = "Naw", Path = folder3.GetFilePath() });
+            //Items.Add(new Item { Name = "ThatsRad.txt", Path = file3.GetFilePath() });
         }
 
-        public Item SelectedItem
+        public IDirectoryItem SelectedItem
         {
             get { return mSelectedItem; }
             set
             {
-                if (mSelectedItem!= value)
+                if (mSelectedItem != value)
                 {
-                    if (mSelectedItem == null)
-                    {
-                        mSelectedItem = new Item();
-                    }
                     mSelectedItem = value;
                 }
             }
@@ -109,18 +108,9 @@ namespace LeestStorageApplication
             Debug.WriteLine("Click Click");
         }
 
-    }
-
-    public class Item
-    {
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public string DetailInfo
+        public void notify(ObservableCollection<IDirectoryItem> observable)
         {
-            get
-            {
-                return "Path: " + Path;
-            }
+            this.Items = observable;
         }
     }
 

@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LeestStorageApplication
 {
-    public interface IDirectoryItem
+    public interface ItemListCallback
     {
-
-        public string Name { get; set; }
-        public string DetailInfo { get; }
-
+        public abstract void notify(ObservableCollection<IDirectoryItem> observable);
     }
 }

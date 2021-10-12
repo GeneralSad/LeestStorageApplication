@@ -44,8 +44,6 @@ namespace LeestStorageApplication
                 new Item{Name= "ThatsRad.txt", Path=file3.getFilePath()}
             };
             */
-
-            CommunicationHandler handler = new CommunicationHandler();
             
             InitializeComponent();
             viewModel = new ViewModel();

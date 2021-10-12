@@ -12,36 +12,18 @@ namespace LeestStorageApplication
     {
 
         public string Name { get; set; }
-        public Folder Parent { get; set; }
 
-        public string path
+        public Folder(string name)
+        {
+            this.Name = name;
+        }
+
+        public string DetailInfo
         {
             get
             {
-                return GetFilePath();
-            } 
-            set
-            {
-                //TODO: Code for moving file
+                return "Type: Folder";
             }
         }
-
-        public Folder(string name, Folder parent)
-        {
-            this.Name = name;
-            this.Parent = parent;
-        }
-
-        public string GetFilePath()
-        {
-            if(Parent != null)
-            {
-                return Parent.GetFilePath() + "/" + Name;
-            } else
-            {
-                return "/" + Name;
-            }
-        }
-
     }
 }

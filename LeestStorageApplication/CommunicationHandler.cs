@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -20,12 +21,13 @@ namespace LeestStorageApplication
         private TcpClient tcpClient;
         private Client client;
         private bool running { get; set; }
+        private ItemListCallback listener;
 
 
-        public CommunicationHandler()
+        public CommunicationHandler(ItemListCallback listener)
         {
             this.tcpClient = new TcpClient();
-
+            this.listener = listener;
             new Thread(Run).Start();
         }
 
@@ -66,10 +68,22 @@ namespace LeestStorageApplication
             switch (jMessage.Value<string>("type"))
             {
                 case "Directory":
+                    ObservableCollection<IDirectoryItem> itemList = new ObservableCollection<IDirectoryItem>();
                     foreach (string file in jMessage.Value<JArray>("files"))
                     {
-                        Debug.WriteLine(file.Substring(file.LastIndexOf(@"\") + 1));
+                        string filename = file.Substring(file.LastIndexOf(@"\") + 1);
+                        Debug.WriteLine(filename);
+
+                        if (filename.Contains("."))
+                        {
+                            itemList.Add(new File(filename));
+                        } else
+                        {
+                            itemList.Add(new Folder(filename));
+                        }
+
                     }
+                    listener.notify(itemList);
                     Debug.WriteLine("received Directory");
 
                     break;
