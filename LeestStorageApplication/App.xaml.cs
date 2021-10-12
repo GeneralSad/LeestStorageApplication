@@ -8,10 +8,21 @@ using System.Windows;
 
 namespace LeestStorageApplication
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+
+        private ViewModel viewModel;
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            var window = new MainWindow();
+
+            viewModel = new ViewModel();
+
+            window.DataContext = viewModel;
+
+            window.Show();
+        }
+
     }
 }

@@ -80,7 +80,10 @@ namespace LeestStorageApplication
         {
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
-            await this.handler.DownloadRequest(this.Items[number].Name);
+            if(number != -1)
+            {
+                await this.handler.DownloadRequest(this.Items[number].Name);
+            }
         }
 
         public async void Upload(object parameter)
@@ -104,7 +107,10 @@ namespace LeestStorageApplication
         {
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
-            await this.handler.DeleteRequest(this.Items[number].Name);
+            if (number != -1)
+            {
+                await this.handler.DeleteRequest(this.Items[number].Name);
+            }
             Debug.WriteLine("Delete: " + number);
         }
 

@@ -12,9 +12,9 @@
         Width="800"
         Height="400">
 
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <local:ViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <StackPanel x:Name="MainPanel">
         <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
