@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\DirectoryFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\DirectoryFolder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryLayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileOperation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\IDirectoryItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerAddress.cs" />

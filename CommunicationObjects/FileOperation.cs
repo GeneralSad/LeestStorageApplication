@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,6 +68,26 @@ namespace CommunicationObjects
         {
     
             return Directory.GetFileSystemEntries(directory);
+        }
+
+        //This method puts (1) after the name of the file to make sure it does not overwrite an old file. This method only works for files with a "."
+        public static string ReturnAvailableFilePath(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    int dotLocation = filePath.IndexOf(".");
+                    return ReturnAvailableFilePath(filePath.Insert(dotLocation, " (1)"));
+                }
+                catch (ArgumentNullException e)
+                {
+                    Debug.WriteLine(e);
+                    return filePath;
+                }
+            }
+
+            return filePath;
         }
     }
 }

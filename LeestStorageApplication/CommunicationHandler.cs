@@ -103,10 +103,9 @@ namespace LeestStorageApplication
 
                     break;
                 case "DirectoryFile":
-                    string downloadLocation = new KnownFolder(KnownFolderType.Downloads).Path + @"\" +
-                                              jMessage.Value<String>("fileName");
+                    string downloadLocation = new KnownFolder(KnownFolderType.Downloads).Path;
                     Debug.WriteLine("Downloading to: " + downloadLocation);
-                    await FileOperation.FileFromByteArray(downloadLocation, await this.client.Read());
+                    await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(downloadLocation + @"\" + jMessage.Value<String>("fileName")), await this.client.Read());
                     Console.WriteLine("Received file");
                     break;
 
