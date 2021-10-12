@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunicationObjects;
+using LeestStorageApplication;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -62,7 +63,10 @@ namespace LeestStorageServer
                 case "DirectoryRequest":
                     Console.WriteLine("Send Updated Directory");
                     String[] files = FileOperation.ReturnFilesFromDirectory(this.fileOperation.CurrentDirectoryLayer);
-                    var o = new { type = "Directory", files = files };
+
+                    DirectoryFile[] directoryFiles = FileOperation.FileStringArrayToFileObjectArray(files);
+                    var o = new { type = "Directory", files = directoryFiles };
+
                     await this.client.Write(o);
                     break;
                 case "FileRequest":

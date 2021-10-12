@@ -45,16 +45,22 @@ namespace CommunicationObjects
             return await File.ReadAllBytesAsync(FilePath);
         }
 
-        /*
-        public static DirectoryFile[] FileStringArrayToFileObject(string[] files)
+        
+        public static DirectoryFile[] FileStringArrayToFileObjectArray(string[] files)
         {
             DirectoryFile[] directoryFiles = new DirectoryFile[files.Length];
+            int i = 0;
             foreach (string file in files)
             {
-                File file = File.GetAttributes(file);
+                DirectoryFile directoryFile = new DirectoryFile(file.Substring(file.LastIndexOf(@"\") + 1));
+                directoryFile.LastChanged = File.GetLastWriteTime(file);
+                directoryFiles[i] = directoryFile;
+                i++;
             }
+
+            return directoryFiles;
         }
-        */
+        
 
         // @"\FilesForTransfer"
         public static string[] ReturnFilesFromDirectory(string directory)

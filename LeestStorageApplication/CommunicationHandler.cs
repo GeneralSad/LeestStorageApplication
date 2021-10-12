@@ -42,7 +42,6 @@ namespace LeestStorageApplication
             await tcpClient.ConnectAsync(ServerAddress.IpAddress, ServerAddress.port);
 
             this.client = new Client(tcpClient);
-            await this.SendMessage(new { type = "FileRequest" });
 
             this.running = true;
             while (running)
@@ -69,9 +68,11 @@ namespace LeestStorageApplication
             {
                 case "Directory":
                     ObservableCollection<IDirectoryItem> itemList = new ObservableCollection<IDirectoryItem>();
-                    foreach (string file in jMessage.Value<JArray>("files"))
+                    foreach (JObject jobject in jMessage.Value<JArray>("files"))
                     {
-                        string filename = file.Substring(file.LastIndexOf(@"\") + 1);
+                        DirectoryFile file =  new DirectoryFile(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged"));
+
+                        string filename = file.Name.Substring(file.Name.LastIndexOf(@"\") + 1);
                         Debug.WriteLine(filename);
 
                         if (filename.Contains("."))
