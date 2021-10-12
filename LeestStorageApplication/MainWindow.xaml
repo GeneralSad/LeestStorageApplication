@@ -18,10 +18,11 @@
 
     <StackPanel x:Name="MainPanel">
         <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Button x:Name="ReloadButton" Command="{Binding cReload}" Content="Reload" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="DownloadButton" Command="{Binding cDownload}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Download" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="UploadButton" Command="{Binding cUpload}" Content="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="DeleteButton" Command="{Binding cDelete}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
+            <Button x:Name="BackButton" Command="{Binding cBack}" Content="Back" Margin="5,0,0,0"/>
+            <Button x:Name="ReloadButton" Command="{Binding cReload}" Content="Reload" Margin="5,0,0,0"/>
+            <Button x:Name="DownloadButton" Command="{Binding cDownload}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Download" Margin="5,0,0,0"/>
+            <Button x:Name="UploadButton" Command="{Binding cUpload}" Content="Upload" Margin="5,0,0,0"/>
+            <Button x:Name="DeleteButton" Command="{Binding cDelete}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Delete" Margin="5,0,0,0"/>
         </StackPanel>
         <StackPanel x:Name="ContentStackPanel" Orientation="Horizontal" HorizontalAlignment="Stretch">
             <ListView x:Name="DirectoryListView" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" MinWidth="400" MinHeight="300" HorizontalContentAlignment="Left">

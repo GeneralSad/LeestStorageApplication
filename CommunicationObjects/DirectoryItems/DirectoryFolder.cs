@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace LeestStorageApplication
 {
    
-
     public class DirectoryFolder : IDirectoryItem
     {
 
@@ -22,7 +21,7 @@ namespace LeestStorageApplication
         {
             get
             {
-                return "Type: DirectoryFolder";
+                return "Type: Folder";
             }
         }
     }

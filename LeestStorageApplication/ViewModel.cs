@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using Microsoft.Win32;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace LeestStorageApplication
     public class ViewModel : BindableBase, INotifyPropertyChanged, ItemListCallback
     {
 
+        public DelegateCommand<object> cBack { get; private set; }
         public DelegateCommand<object> cReload { get; private set; }
         public DelegateCommand<object> cDownload { get; private set; }
         public DelegateCommand<object> cUpload { get; private set; }
@@ -27,12 +29,15 @@ namespace LeestStorageApplication
 
         public ObservableCollection<IDirectoryItem> Items { get; set; }
 
+        OpenFileDialog openFileDialog;
+
         CommunicationHandler handler;
 
         public ViewModel()
         {
             this.handler = new CommunicationHandler(this);
 
+            cBack = new DelegateCommand<object>(Back, canSubmit);
             cReload = new DelegateCommand<object>(Reload, canSubmit);
             cDownload = new DelegateCommand<object>(Download, canSubmit);
             cUpload = new DelegateCommand<object>(Upload, canSubmit);
@@ -81,6 +86,18 @@ namespace LeestStorageApplication
 
         public void Upload(object parameter)
         {
+            openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "Select file to upload";
+            openFileDialog.Multiselect = false;
+            openFileDialog.ValidateNames = true;
+            Nullable<bool> result = openFileDialog.ShowDialog();
+
+            if(result == true)
+            {
+                //TODO upload to server
+                Debug.WriteLine(openFileDialog.FileName);
+            }
+
             Debug.WriteLine("Upload");
         }
 
@@ -96,6 +113,11 @@ namespace LeestStorageApplication
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
             Debug.WriteLine("Enter: " + number);
+        }
+
+        public void Back(object parameter)
+        {
+            Debug.WriteLine("Back");
         }
 
         public void notify(ObservableCollection<IDirectoryItem> observable)
