@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LeestStorageApplication
 {
-    interface IDirectoryItem
+    public interface IDirectoryItem
     {
 
-        public string name { get; set; }
-        public Folder parent { get; set; }
-        public string getFilePath();
+        public string Name { get; set; }
+        public Folder Parent { get; set; }
+        public string GetFilePath();
 
     }
 }

@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using LeestStorageServer;
 
 namespace LeestStorageApplication
@@ -14,6 +17,9 @@ namespace LeestStorageApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private readonly ViewModel viewModel;
+
         public MainWindow()
         {
             /*
@@ -42,14 +48,11 @@ namespace LeestStorageApplication
             CommunicationHandler handler = new CommunicationHandler();
             
             InitializeComponent();
-            
-        }
-    }
+            viewModel = new ViewModel();
+            this.DataContext = viewModel;
 
-    class Item
-    {
-        public string Name { get; set; }
-        public string Path { get; set; }
+        }
+
     }
 
 }

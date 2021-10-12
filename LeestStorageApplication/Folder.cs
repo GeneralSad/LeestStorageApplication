@@ -11,23 +11,35 @@ namespace LeestStorageApplication
     public class Folder : IDirectoryItem
     {
 
-        public string name { get; set; }
-        public Folder parent { get; set; }
+        public string Name { get; set; }
+        public Folder Parent { get; set; }
+
+        public string path
+        {
+            get
+            {
+                return GetFilePath();
+            } 
+            set
+            {
+                //TODO: Code for moving file
+            }
+        }
 
         public Folder(string name, Folder parent)
         {
-            this.name = name;
-            this.parent = parent;
+            this.Name = name;
+            this.Parent = parent;
         }
 
-        public string getFilePath()
+        public string GetFilePath()
         {
-            if(parent != null)
+            if(Parent != null)
             {
-                return parent.getFilePath() + "/" + name;
+                return Parent.GetFilePath() + "/" + Name;
             } else
             {
-                return "/" + name;
+                return "/" + Name;
             }
         }
 
