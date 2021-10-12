@@ -2,17 +2,10 @@
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 
 namespace LeestStorageApplication
 {
@@ -29,9 +22,9 @@ namespace LeestStorageApplication
 
         public ObservableCollection<IDirectoryItem> Items { get; set; }
 
-        OpenFileDialog openFileDialog;
+        private OpenFileDialog openFileDialog { get; set; }
 
-        CommunicationHandler handler;
+        private CommunicationHandler handler { get; set; }
 
         public ViewModel()
         {

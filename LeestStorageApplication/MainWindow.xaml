@@ -18,6 +18,7 @@
 
     <StackPanel x:Name="MainPanel">
         <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
+
             <Button x:Name="BackButton" Command="{Binding cBack}" Content="Back" Margin="5,0,0,0"/>
             <Button x:Name="ReloadButton" Command="{Binding cReload}" Content="Reload" Margin="5,0,0,0"/>
             <Button x:Name="DownloadButton" Command="{Binding cDownload}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Download" Margin="5,0,0,0"/>

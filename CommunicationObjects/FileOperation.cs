@@ -51,16 +51,16 @@ namespace CommunicationObjects
         {
             if (File.Exists(filePath))
             {
-                try
+                if (filePath.Contains("."))
                 {
                     int dotLocation = filePath.IndexOf(".");
                     return ReturnAvailableFilePath(filePath.Insert(dotLocation, " (1)"));
                 }
-                catch (ArgumentNullException e)
+                else
                 {
-                    Debug.WriteLine(e);
                     return filePath;
                 }
+
             }
 
             return filePath;
