@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FilesForTransfer\" />
+    <Folder Include="FilesForTransfer\Microfoontuutjeopeenscootermobiel\" />
   </ItemGroup>
 
 </Project>

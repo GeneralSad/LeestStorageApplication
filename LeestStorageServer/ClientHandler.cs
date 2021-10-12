@@ -62,7 +62,6 @@ namespace LeestStorageServer
                 case "DirectoryRequest":
                     Console.WriteLine("Send Updated Directory");
                     String[] files = FileOperation.ReturnFilesFromDirectory(this.fileOperation.CurrentDirectoryLayer);
-                    FileOperation.
                     var o = new { type = "Directory", files = files };
                     await this.client.Write(o);
                     break;

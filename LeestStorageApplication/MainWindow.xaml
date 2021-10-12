@@ -22,7 +22,6 @@
             <Button x:Name="DownloadButton" Command="{Binding cDownload}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Download" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
             <Button x:Name="UploadButton" Command="{Binding cUpload}" Content="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
             <Button x:Name="DeleteButton" Command="{Binding cDelete}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
-            <Button x:Name="InfoButton" Command="{Binding cMoreInfo}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="More Info" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0"/>
         </StackPanel>
         <StackPanel x:Name="ContentStackPanel" Orientation="Horizontal" HorizontalAlignment="Stretch">
             <ListView x:Name="DirectoryListView" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" MinWidth="400" MinHeight="300" HorizontalContentAlignment="Left">
@@ -32,12 +31,12 @@
                             <StackPanel.InputBindings>
                                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.cEnterFile, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding ElementName=DirectoryListView}"/>
                             </StackPanel.InputBindings>
-                            <Label Content="{Binding Name}" Padding="5,5,305,5"/>
+                            <Label Content="{Binding Name}" Padding="5,5,300,5"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel x:Name="InfoPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,0,2,0" >
+            <StackPanel x:Name="InfoPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,0,2,0" MaxWidth="270" >
                 <TextBlock x:Name="NameBlock" Text="{Binding ElementName=DirectoryListView, Path=SelectedItem.Name}" TextWrapping="Wrap" FontWeight="Bold" FontSize="20"/>
                 <TextBlock x:Name="MoreInfoBlock" Text="{Binding ElementName=DirectoryListView, Path=SelectedItem.DetailInfo}" TextWrapping="Wrap" FontSize="16"/>
             </StackPanel>

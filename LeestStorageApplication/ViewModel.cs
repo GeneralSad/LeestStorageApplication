@@ -23,22 +23,20 @@ namespace LeestStorageApplication
         public DelegateCommand<object> cDownload { get; private set; }
         public DelegateCommand<object> cUpload { get; private set; }
         public DelegateCommand<object> cDelete { get; private set; }
-        public DelegateCommand<object> cMoreInfo { get; private set; }
         public DelegateCommand<object> cEnterFile { get; private set; }
 
         public ObservableCollection<IDirectoryItem> Items { get; set; }
 
-        private IDirectoryItem mSelectedItem = null;
+        CommunicationHandler handler;
 
         public ViewModel()
         {
-            CommunicationHandler handler = new CommunicationHandler(this);
+            this.handler = new CommunicationHandler(this);
 
             cReload = new DelegateCommand<object>(Reload, canSubmit);
             cDownload = new DelegateCommand<object>(Download, canSubmit);
             cUpload = new DelegateCommand<object>(Upload, canSubmit);
             cDelete = new DelegateCommand<object>(Delete, canSubmit);
-            cMoreInfo = new DelegateCommand<object>(MoreInfo, canSubmit);
             cEnterFile = new DelegateCommand<object>(EnterFile, canSubmit);
 
             //DirectoryFolder folder1 = new DirectoryFolder("hell", null);
@@ -61,31 +59,24 @@ namespace LeestStorageApplication
             //Items.Add(new Item { Name = "ThatsRad.txt", Path = file3.GetFilePath() });
         }
 
-        public IDirectoryItem SelectedItem
-        {
-            get { return mSelectedItem; }
-            set
-            {
-                if (mSelectedItem != value)
-                {
-                    mSelectedItem = value;
-                }
-            }
-        }
+        public IDirectoryItem SelectedItem { get; set; }
 
         public bool canSubmit(object parameter)
         {
             return true;
         }
 
-        public void Reload(object parameter)
+        public async void Reload(object parameter)
         {
-            Debug.WriteLine("Reload");
+            await handler.SendMessage(new { type = "DirectoryRequest" } );
+            Debug.WriteLine("Reloaded");
         }
 
         public void Download(object parameter)
         {
-            Debug.WriteLine("Download");
+            ListView listView = (ListView)parameter;
+            int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
+            Debug.WriteLine("Download: " + number);
         }
 
         public void Upload(object parameter)
@@ -95,17 +86,16 @@ namespace LeestStorageApplication
 
         public void Delete(object parameter)
         {
-            Debug.WriteLine("Delete");
+            ListView listView = (ListView)parameter;
+            int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
+            Debug.WriteLine("Delete: " + number);
         }
 
-        public void MoreInfo(object parameter)
+        public void EnterFile(object parameter)
         {
-            Debug.WriteLine("More Info");
-        }
-
-        public void EnterFile(object ListView)
-        {
-            Debug.WriteLine("Click Click");
+            ListView listView = (ListView)parameter;
+            int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
+            Debug.WriteLine("Enter: " + number);
         }
 
         public void notify(ObservableCollection<IDirectoryItem> observable)
