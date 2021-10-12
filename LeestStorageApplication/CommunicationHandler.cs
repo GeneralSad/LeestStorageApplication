@@ -49,6 +49,15 @@ namespace LeestStorageApplication
             Debug.WriteLine("Download: " + fileName);
         }
 
+        public async Task UploadRequest(string file)
+        {
+            byte[] fileToByteArray = await FileOperation.FileToByteArray(file);
+            await this.client.Write(new { type = "FileUploadRequest", fileName = file.Substring(file.LastIndexOf(@"\")) });
+            await this.client.Write(fileToByteArray);
+            Debug.WriteLine("Upload: " + file);
+        }
+
+
         private async void Run()
         {
 

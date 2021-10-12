@@ -83,7 +83,7 @@ namespace LeestStorageApplication
             await this.handler.DownloadRequest(this.Items[number].Name);
         }
 
-        public void Upload(object parameter)
+        public async void Upload(object parameter)
         {
             openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "Select file to upload";
@@ -94,6 +94,7 @@ namespace LeestStorageApplication
             if(result == true)
             {
                 //TODO upload to server
+               await this.handler.UploadRequest(openFileDialog.FileName);
                 Debug.WriteLine(openFileDialog.FileName);
             }
 

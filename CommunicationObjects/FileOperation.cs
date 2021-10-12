@@ -10,31 +10,7 @@ namespace CommunicationObjects
 {
     class FileOperation
     {
-        public string CurrentDirectoryLayer { get; set; }
-        public int Layer { get; private set; }
 
-
-        public FileOperation()
-        {
-            this.CurrentDirectoryLayer = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\FilesForTransfer";
-            this.Layer = 0;
-        }
-
-        public void AddDirectoryLayer(string directory)
-        {
-            this.CurrentDirectoryLayer += directory;
-            this.Layer++;
-        }
-
-        public void RemoveDirectoryLayer()
-        {
-            if (this.Layer > 0)
-            {
-                this.CurrentDirectoryLayer =
-                    this.CurrentDirectoryLayer.Substring(0, this.CurrentDirectoryLayer.LastIndexOf("/"));
-                this.Layer--;
-            }
-        }
 
         public static async Task FileFromByteArray(string directory, byte[] file)
         {

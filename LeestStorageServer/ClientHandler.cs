@@ -19,14 +19,14 @@ namespace LeestStorageServer
         private TcpClient tcpClient;
         private Client client;
         private bool running { get; set; }
-        private FileOperation fileOperation;
+        private DirectoryLayer directoryLayer;
 
 
         public ClientHandler(TcpClient tcpClient)
         {
             this.tcpClient = tcpClient;
             this.client = new Client(tcpClient);
-            this.fileOperation = new FileOperation();
+            this.directoryLayer = new DirectoryLayer();
             new Thread(Run).Start();
         }
 
@@ -64,7 +64,7 @@ namespace LeestStorageServer
             {
                 case "DirectoryRequest":
                     Console.WriteLine("Send Updated Directory");
-                    String[] files = FileOperation.ReturnFilesFromDirectory(this.fileOperation.CurrentDirectoryLayer);
+                    String[] files = FileOperation.ReturnFilesFromDirectory(this.directoryLayer.CurrentDirectoryLayer);
 
                     DirectoryFile[] directoryFiles = FileOperation.FileStringArrayToFileObjectArray(files);
                     var o = new { type = "Directory", files = directoryFiles };
@@ -75,14 +75,14 @@ namespace LeestStorageServer
                     Console.WriteLine("Start sending File");
                     string fileName = jMessage.Value<String>("fileName");
 
-                    byte[] fileToByteArray = await FileOperation.FileToByteArray(this.fileOperation.CurrentDirectoryLayer + @"\" + fileName);
+                    byte[] fileToByteArray = await FileOperation.FileToByteArray(this.directoryLayer.CurrentDirectoryLayer + @"\" + fileName);
                     await this.client.Write(new {type = "DirectoryFile", fileName});
                     await this.client.Write(fileToByteArray);
                     break;
                 case "FileUploadRequest":
                     Console.WriteLine("Start receiving File");
-                    //The code below is placeholder, might even break something :)
-                    await FileOperation.FileFromByteArray( Environment.CurrentDirectory + @"//file", await this.client.Read());
+                    string file = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
+                    await FileOperation.FileFromByteArray( FileOperation.ReturnAvailableFilePath(file), await this.client.Read());
                     break;
 
             }
