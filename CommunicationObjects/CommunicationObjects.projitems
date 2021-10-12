@@ -10,8 +10,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\DirectoryFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\DirectoryFolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileOperation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\IDirectoryItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MessageCallback.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerAddress.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)DirectoryItems\" />
   </ItemGroup>
 </Project>

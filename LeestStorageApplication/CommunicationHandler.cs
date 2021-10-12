@@ -76,10 +76,10 @@ namespace LeestStorageApplication
 
                         if (filename.Contains("."))
                         {
-                            itemList.Add(new File(filename));
+                            itemList.Add(new DirectoryFile(filename));
                         } else
                         {
-                            itemList.Add(new Folder(filename));
+                            itemList.Add(new DirectoryFolder(filename));
                         }
 
                     }
@@ -87,8 +87,8 @@ namespace LeestStorageApplication
                     Debug.WriteLine("received Directory");
 
                     break;
-                case "File":
-                    await FileOperation.FileFromByteArray(@"C:\File\KrakenSetup.exe", await this.client.Read());
+                case "DirectoryFile":
+                    await FileOperation.FileFromByteArray(@"C:\DirectoryFile\KrakenSetup.exe", await this.client.Read());
                     Console.WriteLine("Received file");
                     break;
 

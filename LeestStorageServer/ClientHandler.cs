@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -17,13 +18,14 @@ namespace LeestStorageServer
         private TcpClient tcpClient;
         private Client client;
         private bool running { get; set; }
+        private FileOperation fileOperation;
 
 
         public ClientHandler(TcpClient tcpClient)
         {
             this.tcpClient = tcpClient;
             this.client = new Client(tcpClient);
-
+            this.fileOperation = new FileOperation();
             new Thread(Run).Start();
         }
 
@@ -34,9 +36,6 @@ namespace LeestStorageServer
 
         private async void Run()
         {
-            String[] files = FileOperation.ReturnFilesFromDirectory(FileOperation.GetProjectDirectory() + @"\FilesForTransfer");
-            var o = new {type = "Directory", files = files};
-            await this.client.Write(o);
             this.running = true;
             while (running)
             {
@@ -62,6 +61,10 @@ namespace LeestStorageServer
             {
                 case "DirectoryRequest":
                     Console.WriteLine("Send Updated Directory");
+                    String[] files = FileOperation.ReturnFilesFromDirectory(this.fileOperation.CurrentDirectoryLayer);
+                    FileOperation.
+                    var o = new { type = "Directory", files = files };
+                    await this.client.Write(o);
                     break;
                 case "FileRequest":
                     Console.WriteLine("Start sending File");

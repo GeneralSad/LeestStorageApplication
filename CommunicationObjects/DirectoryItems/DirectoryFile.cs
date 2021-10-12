@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace LeestStorageApplication
 {
-   
-
-    public class Folder : IDirectoryItem
+    class DirectoryFile : IDirectoryItem
     {
-
         public string Name { get; set; }
+        public string LastChanged { get; set; }
 
-        public Folder(string name)
+        public DirectoryFile(string name)
         {
             this.Name = name;
         }
@@ -22,7 +20,7 @@ namespace LeestStorageApplication
         {
             get
             {
-                return "Type: Folder";
+                return "Type: DirectoryFile";
             }
         }
     }

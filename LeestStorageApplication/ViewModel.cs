@@ -41,18 +41,18 @@ namespace LeestStorageApplication
             cMoreInfo = new DelegateCommand<object>(MoreInfo, canSubmit);
             cEnterFile = new DelegateCommand<object>(EnterFile, canSubmit);
 
-            //Folder folder1 = new Folder("hell", null);
-            //Folder folder2 = new Folder("yeah", folder1);
-            //Folder folder3 = new Folder("naw", folder1);
-            //Folder folder4 = new Folder("man", folder2);
+            //DirectoryFolder folder1 = new DirectoryFolder("hell", null);
+            //DirectoryFolder folder2 = new DirectoryFolder("yeah", folder1);
+            //DirectoryFolder folder3 = new DirectoryFolder("naw", folder1);
+            //DirectoryFolder folder4 = new DirectoryFolder("man", folder2);
 
-            //File file1 = new File("ThatsRad.txt", folder2); //Hell/Yeah
-            //File file2 = new File("ThatsNotSoRad.txt", folder3); //Hell/Naw
-            //File file3 = new File("ThatsRad.txt", folder4); //Hell/Yeah/Man
+            //DirectoryFile file1 = new DirectoryFile("ThatsRad.txt", folder2); //Hell/Yeah
+            //DirectoryFile file2 = new DirectoryFile("ThatsNotSoRad.txt", folder3); //Hell/Naw
+            //DirectoryFile file3 = new DirectoryFile("ThatsRad.txt", folder4); //Hell/Yeah/Man
 
-            //Debug.WriteLine("File 1: " + file1.GetFilePath());
-            //Debug.WriteLine("File 2: " + file2.GetFilePath());
-            //Debug.WriteLine("File 3: " + file3.GetFilePath());
+            //Debug.WriteLine("DirectoryFile 1: " + file1.GetFilePath());
+            //Debug.WriteLine("DirectoryFile 2: " + file2.GetFilePath());
+            //Debug.WriteLine("DirectoryFile 3: " + file3.GetFilePath());
 
             Items = new ObservableCollection<IDirectoryItem>();
             //Items.Add(new Item { Name = "Hell", Path = folder1.GetFilePath() });
