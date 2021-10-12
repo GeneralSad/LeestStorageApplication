@@ -31,13 +31,13 @@ namespace LeestStorageServer
             return ret;
         }
 
-        public void Write(Object message)
+        public async Task Write(Object message)
         {
             try
             {
 
-                stream.Write(WrapMessage(Encoding.ASCII.GetBytes(ToJsonMessage(message))));
-                stream.Flush();
+                await stream.WriteAsync(WrapMessage(Encoding.ASCII.GetBytes(ToJsonMessage(message))));
+                await stream.FlushAsync();
             }
             catch (Exception e)
             {
