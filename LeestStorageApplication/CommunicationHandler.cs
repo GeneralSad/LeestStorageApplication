@@ -43,10 +43,19 @@ namespace LeestStorageApplication
             Debug.WriteLine("Reloaded");
         }
 
+        public async Task DeleteRequest(string fileName)
+        {
+            await this.client.Write(new { type = "DeleteRequest", fileName });
+            Debug.WriteLine("Download: " + fileName);
+            await Reload();
+        }
+
+
         public async Task DownloadRequest(string fileName)
         {
             await this.client.Write(new { type = "FileRequest", fileName});
             Debug.WriteLine("Download: " + fileName);
+
         }
 
         public async Task UploadRequest(string file)
@@ -55,6 +64,7 @@ namespace LeestStorageApplication
             await this.client.Write(new { type = "FileUploadRequest", fileName = file.Substring(file.LastIndexOf(@"\")) });
             await this.client.Write(fileToByteArray);
             Debug.WriteLine("Upload: " + file);
+            await Reload();
         }
 
 

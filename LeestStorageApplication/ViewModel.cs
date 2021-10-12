@@ -93,18 +93,18 @@ namespace LeestStorageApplication
 
             if(result == true)
             {
-                //TODO upload to server
-               await this.handler.UploadRequest(openFileDialog.FileName);
+                await this.handler.UploadRequest(openFileDialog.FileName);
                 Debug.WriteLine(openFileDialog.FileName);
             }
 
             Debug.WriteLine("Upload");
         }
 
-        public void Delete(object parameter)
+        public async void Delete(object parameter)
         {
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
+            await this.handler.DeleteRequest(this.Items[number].Name);
             Debug.WriteLine("Delete: " + number);
         }
 

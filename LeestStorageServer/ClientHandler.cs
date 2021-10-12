@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -72,8 +73,9 @@ namespace LeestStorageServer
                     await this.client.Write(o);
                     break;
                 case "FileRequest":
-                    Console.WriteLine("Start sending File");
+                    
                     string fileName = jMessage.Value<String>("fileName");
+                    Console.WriteLine($"Start sending File {fileName}");
 
                     byte[] fileToByteArray = await FileOperation.FileToByteArray(this.directoryLayer.CurrentDirectoryLayer + @"\" + fileName);
                     await this.client.Write(new {type = "DirectoryFile", fileName});
@@ -84,7 +86,12 @@ namespace LeestStorageServer
                     string file = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
                     await FileOperation.FileFromByteArray( FileOperation.ReturnAvailableFilePath(file), await this.client.Read());
                     break;
+                case "DeleteRequest":
+                    string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
+                    Console.WriteLine($"deleting file {deleteFileLocation}");
+                    File.Delete(deleteFileLocation);
 
+                    break;
             }
         }
 
