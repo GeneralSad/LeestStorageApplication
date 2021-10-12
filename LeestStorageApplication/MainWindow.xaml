@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LeestStorageApplication"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:i1="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow"
         MinWidth="600"
@@ -27,13 +27,16 @@
         </StackPanel>
         <StackPanel x:Name="ContentStackPanel" Orientation="Horizontal" HorizontalAlignment="Stretch">
             <ListView x:Name="DirectoryListView" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" MinWidth="400" MinHeight="300" HorizontalContentAlignment="Left">
-                <ListView.InputBindings>
+                <!--<ListView.InputBindings>
                     <MouseBinding Gesture="LeftDoubleClick" Command="{Binding cEnterFile}" CommandParameter="{Binding ElementName=DirectoryListView}"/>
-                </ListView.InputBindings>
+                </ListView.InputBindings>-->
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <Label Content="{Binding Name}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel.InputBindings>
+                                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.cEnterFile, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding ElementName=DirectoryListView}"/>
+                            </StackPanel.InputBindings>
+                            <Label Content="{Binding Name}" Padding="5,5,305,5"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
