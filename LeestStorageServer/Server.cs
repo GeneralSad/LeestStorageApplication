@@ -10,7 +10,7 @@ using CommunicationObjects;
 
 namespace LeestStorageServer
 {
-    class Server
+    class Server : ServerCallback
     {
         private TcpListener listener;
         private List<ClientHandler> clients;
@@ -38,7 +38,7 @@ namespace LeestStorageServer
                 {
                     TcpClient client = await this.listener.AcceptTcpClientAsync().ConfigureAwait(false);
                     Console.WriteLine($"A new client connected: {client}");
-                    this.clients.Add(new ClientHandler(client));
+                    this.clients.Add(new ClientHandler(client, this));
 
                 } catch (Exception e)
                 {
@@ -52,11 +52,16 @@ namespace LeestStorageServer
 
         public void Disable()
         {
-            foreach (ClientHandler client in clients)
+            foreach (ClientHandler client in clients.ToArray())
             {
                 client.Disable();
             }
             this.running = false;
+        }
+
+        public void RemoveClientHandlerFromList(ClientHandler handler)
+        {
+            this.clients.Remove(handler);
         }
     }
 }

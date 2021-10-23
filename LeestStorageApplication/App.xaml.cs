@@ -22,6 +22,7 @@ namespace LeestStorageApplication
             window.DataContext = viewModel;
 
             window.Show();
+            window.Closed += viewModel.Window_Closed;
         }
 
     }

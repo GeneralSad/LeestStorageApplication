@@ -130,6 +130,12 @@ namespace LeestStorageApplication
         {
             this.Items = observable;
         }
+
+        public async void Window_Closed(object sender, EventArgs e)
+        {
+            await this.handler.CloseConnection();
+
+        }
     }
 
 }

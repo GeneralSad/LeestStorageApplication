@@ -18,13 +18,15 @@ namespace LeestStorageServer
         private Client client;
         private bool running { get; set; }
         private DirectoryLayer directoryLayer;
+        private ServerCallback callback;
 
 
-        public ClientHandler(TcpClient tcpClient)
+        public ClientHandler(TcpClient tcpClient, ServerCallback callback)
         {
             this.tcpClient = tcpClient;
             this.client = new Client(tcpClient);
             this.directoryLayer = new DirectoryLayer();
+            this.callback = callback;
             new Thread(Run).Start();
         }
 
@@ -59,52 +61,60 @@ namespace LeestStorageServer
 
         private async Task handleMessage(JObject jMessage)
         {
+            if (jMessage == null)
+            {
+                return;
+            }
             switch (jMessage.Value<string>("type"))
             {
                 case "IntoDirectoryRequest":
-                    await IntoDirectoryRequest(jMessage);
+                    await intoDirectoryRequest(jMessage);
                     break;
                 case "OutOfDirectoryRequest":
-                    await OutOfDirectoryRequest();
+                    await outOfDirectoryRequest();
                     break;
 
                 case "DirectoryRequest":
 
-                    await DirectoryRequest();
+                    await directoryRequest();
                     break;
 
                 case "FileRequest":
 
-                    await FileRequest(jMessage);
+                    await fileRequest(jMessage);
                     break;
 
                 case "FileUploadRequest":
 
-                    await FileUploadRequest(jMessage);
+                    await fileUploadRequest(jMessage);
                     break;
 
                 case "DeleteRequest":
-                    await DeleteRequest(jMessage);
+                    await deleteRequest(jMessage);
+                    break;
+                case "CloseConnection":
+                    await closeConnection();
                     break;
             }
         }
 
-        private async Task IntoDirectoryRequest(JObject jMessage)
+
+        private async Task intoDirectoryRequest(JObject jMessage)
         {
             Console.WriteLine("updating current directory");
             string directoryName = jMessage.Value<String>("directoryName");
             this.directoryLayer.AddDirectoryLayer(@"\" + directoryName);
-            await DirectoryRequest();
+            await directoryRequest();
         }
 
-        private async Task OutOfDirectoryRequest()
+        private async Task outOfDirectoryRequest()
         {
             Console.WriteLine("Going back to former directory");
             this.directoryLayer.RemoveDirectoryLayer();
-            await DirectoryRequest();
+            await directoryRequest();
         }
 
-        private async Task DirectoryRequest()
+        private async Task directoryRequest()
         {
             Console.WriteLine("Sending Updated Directory");
             String[] files = FileOperation.ReturnFilesFromDirectory(this.directoryLayer.CurrentDirectoryLayer);
@@ -115,7 +125,7 @@ namespace LeestStorageServer
             await this.client.Write(o);
         }
 
-        private async Task FileRequest(JObject jMessage)
+        private async Task fileRequest(JObject jMessage)
         {
             string fileName = jMessage.Value<String>("fileName");
             Console.WriteLine($"Start sending File {fileName}");
@@ -126,25 +136,34 @@ namespace LeestStorageServer
         }
 
 
-        private async Task FileUploadRequest(JObject jMessage)
+        private async Task fileUploadRequest(JObject jMessage)
         {
             Console.WriteLine("Start receiving File");
             string file = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
             await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(file), await this.client.Read());
         }
 
-        private async Task DeleteRequest(JObject jMessage)
+        private async Task deleteRequest(JObject jMessage)
         {
             string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
             Console.WriteLine($"deleting file {deleteFileLocation}");
             File.Delete(deleteFileLocation);
-            await this.DirectoryRequest();
+            await directoryRequest();
         }
 
 
-        public void Disable()
+        private async Task closeConnection()
         {
+            Console.WriteLine("ClosingConnection");
             this.running = false;
+            this.callback.RemoveClientHandlerFromList(this);
+        }
+
+        public async void Disable()
+        {
+            await this.client.Write(new { type = "CloseConnection"});
+            this.running = false;
+            this.callback.RemoveClientHandlerFromList(this);
         }
     }
 }

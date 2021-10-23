@@ -6,17 +6,19 @@ namespace LeestStorageServer
 {
     class Program
     {
+
+        private static Server server;
         public static async Task Main(string[] args)
         {
-            Server server = new Server();
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
+
+            server = new Server();
             await server.Start();
+        }
 
-           
-
-            //byte[] fileToByteArray = await FileOperation.FileToByteArray(@"E:\download\GitKrakenSetup.exe");
-
-            //Console.WriteLine(fileToByteArray.Length);
-            //await FileOperation.FileFromByteArray(@"C:\File\KrakenSetup.exe", fileToByteArray);
+        static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            server.Disable();
         }
     }
 }

@@ -81,6 +81,13 @@ namespace LeestStorageApplication
             await Reload();
         }
 
+        public async Task CloseConnection()
+        {
+            await this.client.Write(new { type = "CloseConnection"});
+            Debug.WriteLine("Closing connection");
+            this.Disable();
+        }
+
 
         private async void Run()
         {
@@ -111,38 +118,55 @@ namespace LeestStorageApplication
 
         private async Task handleMessage(JObject jMessage)
         {
+            if (jMessage == null)
+            {
+                return;
+            }
             switch (jMessage.Value<string>("type"))
             {
                 case "Directory":
-                    ObservableCollection<IDirectoryItem> itemList = new ObservableCollection<IDirectoryItem>();
-                    foreach (JObject jobject in jMessage.Value<JArray>("files"))
-                    {
-                        DirectoryFile file =  new DirectoryFile(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged"));
-
-                        string filename = file.Name.Substring(file.Name.LastIndexOf(@"\") + 1);
-                        Debug.WriteLine(filename);
-
-                        if (filename.Contains("."))
-                        {
-                            itemList.Add(new DirectoryFile(filename));
-                        } else
-                        {
-                            itemList.Add(new DirectoryFolder(filename));
-                        }
-
-                    }
-                    listener.notify(itemList);
-                    Debug.WriteLine("received Directory");
-
+                    directory(jMessage);
                     break;
                 case "DirectoryFile":
-                    string downloadLocation = new KnownFolder(KnownFolderType.Downloads).Path;
-                    Debug.WriteLine("Downloading to: " + downloadLocation);
-                    await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(downloadLocation + @"\" + jMessage.Value<String>("fileName")), await this.client.Read());
-                    Console.WriteLine("Received file");
+                    await DirectoryFile(jMessage);
+                    break;
+                case "CloseConnection":
+                    Disable();
                     break;
 
             }
+        }
+
+        private void directory(JObject jMessage)
+        {
+            ObservableCollection<IDirectoryItem> itemList = new ObservableCollection<IDirectoryItem>();
+            foreach (JObject jobject in jMessage.Value<JArray>("files"))
+            {
+                DirectoryFile file = new DirectoryFile(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged"));
+
+                string filename = file.Name.Substring(file.Name.LastIndexOf(@"\") + 1);
+                Debug.WriteLine(filename);
+
+                if (filename.Contains("."))
+                {
+                    itemList.Add(new DirectoryFile(filename));
+                }
+                else
+                {
+                    itemList.Add(new DirectoryFolder(filename));
+                }
+
+            }
+            listener.notify(itemList);
+            Debug.WriteLine("received Directory");
+        }
+
+        private async Task DirectoryFile(JObject jMessage)
+        {
+            string downloadLocation = new KnownFolder(KnownFolderType.Downloads).Path;
+            Debug.WriteLine("Downloading to: " + downloadLocation);
+            await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(downloadLocation + @"\" + jMessage.Value<String>("fileName")), await this.client.Read());
+            Console.WriteLine("Received file");
         }
 
         public void Disable()

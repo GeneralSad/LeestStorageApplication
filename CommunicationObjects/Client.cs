@@ -86,10 +86,7 @@ namespace LeestStorageServer
 
         public void Terminate()
         {
-            this.stream.Close();
-            this.stream.Dispose();
             this.client.Close();
-            this.client.Dispose();
         }
     }
 }
