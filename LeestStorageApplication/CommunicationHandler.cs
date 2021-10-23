@@ -78,7 +78,6 @@ namespace LeestStorageApplication
             await this.client.Write(new { type = "FileUploadRequest", fileName = file.Substring(file.LastIndexOf(@"\")) });
             await this.client.Write(fileToByteArray);
             Debug.WriteLine("Upload: " + file);
-            await Reload();
         }
 
         public async Task CloseConnection()

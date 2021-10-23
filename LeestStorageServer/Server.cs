@@ -63,5 +63,13 @@ namespace LeestStorageServer
         {
             this.clients.Remove(handler);
         }
+
+        public async void RefreshDirectoryForAllClientsInDirectory(string directory)
+        {
+            foreach (ClientHandler client in clients)
+            {
+                await client.UpdateDirectoryIfEqual(directory);
+            }
+        }
     }
 }

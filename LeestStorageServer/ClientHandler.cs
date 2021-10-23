@@ -30,9 +30,12 @@ namespace LeestStorageServer
             new Thread(Run).Start();
         }
 
-        public async Task sendMessage(string message)
+        public async Task UpdateDirectoryIfEqual(string directory)
         {
-            await this.client.Write(message);
+            if (this.directoryLayer.CurrentDirectoryLayer == directory)
+            {
+                await directoryRequest();
+            }
         }
 
 
@@ -141,6 +144,7 @@ namespace LeestStorageServer
             Console.WriteLine("Start receiving File");
             string file = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
             await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(file), await this.client.Read());
+            this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
         }
 
         private async Task deleteRequest(JObject jMessage)
@@ -148,7 +152,7 @@ namespace LeestStorageServer
             string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
             Console.WriteLine($"deleting file {deleteFileLocation}");
             File.Delete(deleteFileLocation);
-            await directoryRequest();
+            this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
         }
 
 

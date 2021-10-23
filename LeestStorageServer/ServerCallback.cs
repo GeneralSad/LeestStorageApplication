@@ -9,5 +9,7 @@ namespace LeestStorageServer
     interface ServerCallback
     {
         void RemoveClientHandlerFromList(ClientHandler handler);
+
+        void RefreshDirectoryForAllClientsInDirectory(string directory);
     }
 }
