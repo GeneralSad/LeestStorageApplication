@@ -30,11 +30,11 @@ namespace LeestStorageServer
             new Thread(Run).Start();
         }
 
-        public async Task UpdateDirectoryIfEqual(string directory)
+        public async Task UpdateDirectoryIfEqual(string directory, string[] files)
         {
             if (this.directoryLayer.CurrentDirectoryLayer == directory)
             {
-                await directoryRequest();
+                await directoryRequest(files);
             }
         }
 
@@ -96,7 +96,7 @@ namespace LeestStorageServer
                     await deleteRequest(jMessage);
                     break;
                 case "CloseConnection":
-                    await closeConnection();
+                    closeConnection();
                     break;
             }
         }
@@ -122,6 +122,15 @@ namespace LeestStorageServer
             Console.WriteLine("Sending Updated Directory");
             String[] files = FileOperation.ReturnFilesFromDirectory(this.directoryLayer.CurrentDirectoryLayer);
 
+            DirectoryFile[] directoryFiles = FileOperation.FileStringArrayToFileObjectArray(files);
+            var o = new { type = "Directory", files = directoryFiles };
+
+            await this.client.Write(o);
+        }
+
+        private async Task directoryRequest(string[] files)
+        {
+            Console.WriteLine("Sending Updated Directory");
             DirectoryFile[] directoryFiles = FileOperation.FileStringArrayToFileObjectArray(files);
             var o = new { type = "Directory", files = directoryFiles };
 
@@ -156,9 +165,9 @@ namespace LeestStorageServer
         }
 
 
-        private async Task closeConnection()
+        private void closeConnection()
         {
-            Console.WriteLine("ClosingConnection");
+            Console.WriteLine($"Closing connection: {this}");
             this.running = false;
             this.callback.RemoveClientHandlerFromList(this);
         }

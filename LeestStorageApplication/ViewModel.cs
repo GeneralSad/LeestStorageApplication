@@ -107,16 +107,20 @@ namespace LeestStorageApplication
             Debug.WriteLine("Delete: " + number);
         }
 
+        //This button is not async because allowing the user to use other buttons while loading will break the application
         public async void EnterFile(object parameter)
         {
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
-            
-            string directory = this.Items[number].Name;
-            Debug.WriteLine("Enter: " + directory);
-            if (number != -1 && !directory.Contains("."))
+
+            if (number != -1)
             {
-                await this.handler.IntoDirectoryRequest(directory);
+                string directory = this.Items[number].Name;
+                Debug.WriteLine("Enter: " + directory);
+                if (!directory.Contains("."))
+                {
+                   await this.handler.IntoDirectoryRequest(directory);
+                }
             }
         }
 

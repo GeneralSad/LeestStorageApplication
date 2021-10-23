@@ -42,7 +42,6 @@ namespace CommunicationObjects
         // @"\FilesForTransfer"
         public static string[] ReturnFilesFromDirectory(string directory)
         {
-    
             return Directory.GetFileSystemEntries(directory);
         }
 

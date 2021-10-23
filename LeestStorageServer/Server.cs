@@ -66,9 +66,11 @@ namespace LeestStorageServer
 
         public async void RefreshDirectoryForAllClientsInDirectory(string directory)
         {
+
+            string[] files = FileOperation.ReturnFilesFromDirectory(directory); 
             foreach (ClientHandler client in clients)
             {
-                await client.UpdateDirectoryIfEqual(directory);
+                await client.UpdateDirectoryIfEqual(directory, files);
             }
         }
     }
