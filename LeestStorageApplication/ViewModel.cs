@@ -107,15 +107,22 @@ namespace LeestStorageApplication
             Debug.WriteLine("Delete: " + number);
         }
 
-        public void EnterFile(object parameter)
+        public async void EnterFile(object parameter)
         {
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
-            Debug.WriteLine("Enter: " + number);
+            
+            string directory = this.Items[number].Name;
+            Debug.WriteLine("Enter: " + directory);
+            if (number != -1 && !directory.Contains("."))
+            {
+                await this.handler.IntoDirectoryRequest(directory);
+            }
         }
 
-        public void Back(object parameter)
+        public async void Back(object parameter)
         {
+            await this.handler.OutOfDirectoryRequest();
             Debug.WriteLine("Back");
         }
 

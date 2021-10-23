@@ -37,20 +37,34 @@ namespace LeestStorageApplication
            await this.client.Write(message);
         }
 
+
+
         public async Task Reload()
         {
             await this.client.Write(new { type = "DirectoryRequest" });
             Debug.WriteLine("Reloaded");
         }
+        
+
 
         public async Task DeleteRequest(string fileName)
         {
             await this.client.Write(new { type = "DeleteRequest", fileName });
             Debug.WriteLine("Download: " + fileName);
-            await Reload();
         }
 
+        public async Task IntoDirectoryRequest(string directoryName)
+        {
+            await this.client.Write(new { type = "IntoDirectoryRequest", directoryName });
+            Debug.WriteLine("Going into directory: " + directoryName);
+        }
 
+        public async Task OutOfDirectoryRequest()
+        {
+            await this.client.Write(new { type = "OutOfDirectoryRequest" });
+            Debug.WriteLine("Out of directory");
+
+        }
         public async Task DownloadRequest(string fileName)
         {
             await this.client.Write(new { type = "FileRequest", fileName});

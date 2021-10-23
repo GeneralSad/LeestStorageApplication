@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,41 +56,91 @@ namespace LeestStorageServer
             this.client.Terminate();
         }
 
+
         private async Task handleMessage(JObject jMessage)
         {
             switch (jMessage.Value<string>("type"))
             {
+                case "IntoDirectoryRequest":
+                    await IntoDirectoryRequest(jMessage);
+                    break;
+                case "OutOfDirectoryRequest":
+                    await OutOfDirectoryRequest();
+                    break;
+
                 case "DirectoryRequest":
-                    Console.WriteLine("Send Updated Directory");
-                    String[] files = FileOperation.ReturnFilesFromDirectory(this.directoryLayer.CurrentDirectoryLayer);
 
-                    DirectoryFile[] directoryFiles = FileOperation.FileStringArrayToFileObjectArray(files);
-                    var o = new { type = "Directory", files = directoryFiles };
-
-                    await this.client.Write(o);
+                    await DirectoryRequest();
                     break;
+
                 case "FileRequest":
-                    
-                    string fileName = jMessage.Value<String>("fileName");
-                    Console.WriteLine($"Start sending File {fileName}");
 
-                    byte[] fileToByteArray = await FileOperation.FileToByteArray(this.directoryLayer.CurrentDirectoryLayer + @"\" + fileName);
-                    await this.client.Write(new {type = "DirectoryFile", fileName});
-                    await this.client.Write(fileToByteArray);
+                    await FileRequest(jMessage);
                     break;
+
                 case "FileUploadRequest":
-                    Console.WriteLine("Start receiving File");
-                    string file = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
-                    await FileOperation.FileFromByteArray( FileOperation.ReturnAvailableFilePath(file), await this.client.Read());
-                    break;
-                case "DeleteRequest":
-                    string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
-                    Console.WriteLine($"deleting file {deleteFileLocation}");
-                    File.Delete(deleteFileLocation);
 
+                    await FileUploadRequest(jMessage);
+                    break;
+
+                case "DeleteRequest":
+                    await DeleteRequest(jMessage);
                     break;
             }
         }
+
+        private async Task IntoDirectoryRequest(JObject jMessage)
+        {
+            Console.WriteLine("updating current directory");
+            string directoryName = jMessage.Value<String>("directoryName");
+            this.directoryLayer.AddDirectoryLayer(@"\" + directoryName);
+            await DirectoryRequest();
+        }
+
+        private async Task OutOfDirectoryRequest()
+        {
+            Console.WriteLine("Going back to former directory");
+            this.directoryLayer.RemoveDirectoryLayer();
+            await DirectoryRequest();
+        }
+
+        private async Task DirectoryRequest()
+        {
+            Console.WriteLine("Sending Updated Directory");
+            String[] files = FileOperation.ReturnFilesFromDirectory(this.directoryLayer.CurrentDirectoryLayer);
+
+            DirectoryFile[] directoryFiles = FileOperation.FileStringArrayToFileObjectArray(files);
+            var o = new { type = "Directory", files = directoryFiles };
+
+            await this.client.Write(o);
+        }
+
+        private async Task FileRequest(JObject jMessage)
+        {
+            string fileName = jMessage.Value<String>("fileName");
+            Console.WriteLine($"Start sending File {fileName}");
+
+            byte[] fileToByteArray = await FileOperation.FileToByteArray(this.directoryLayer.CurrentDirectoryLayer + @"\" + fileName);
+            await this.client.Write(new { type = "DirectoryFile", fileName });
+            await this.client.Write(fileToByteArray);
+        }
+
+
+        private async Task FileUploadRequest(JObject jMessage)
+        {
+            Console.WriteLine("Start receiving File");
+            string file = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
+            await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(file), await this.client.Read());
+        }
+
+        private async Task DeleteRequest(JObject jMessage)
+        {
+            string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
+            Console.WriteLine($"deleting file {deleteFileLocation}");
+            File.Delete(deleteFileLocation);
+            await this.DirectoryRequest();
+        }
+
 
         public void Disable()
         {

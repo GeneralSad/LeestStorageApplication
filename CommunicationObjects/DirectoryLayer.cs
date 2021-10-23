@@ -28,7 +28,7 @@ namespace CommunicationObjects
             if (this.Layer > 0)
             {
                 this.CurrentDirectoryLayer =
-                    this.CurrentDirectoryLayer.Substring(0, this.CurrentDirectoryLayer.LastIndexOf("/"));
+                    this.CurrentDirectoryLayer.Substring(0, this.CurrentDirectoryLayer.LastIndexOf(@"\"));
                 this.Layer--;
             }
         }
