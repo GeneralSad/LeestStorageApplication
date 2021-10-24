@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using CommunicationObjects;
+using LeestStorageApplication;
 
 namespace LeestStorageServer
 {
@@ -14,6 +15,8 @@ namespace LeestStorageServer
     {
         private TcpListener listener;
         private List<ClientHandler> clients;
+
+        public static List<string> ProtectedFiles = new List<string>();
 
         private bool running { get; set; }
 
@@ -67,11 +70,27 @@ namespace LeestStorageServer
         public async void RefreshDirectoryForAllClientsInDirectory(string directory)
         {
 
-            string[] files = FileOperation.ReturnFilesFromDirectory(directory); 
+            string[] filesFromDirectory = FileOperation.ReturnFilesFromDirectory(directory);
+            DirectoryFile[] files = FileOperation.FileStringArrayToFileObjectArray(filesFromDirectory);
             foreach (ClientHandler client in clients)
             {
                 await client.UpdateDirectoryIfEqual(directory, files);
             }
+        }
+
+        public bool CheckIfFileIsClearToEdit(string file)
+        {
+            return !ProtectedFiles.Contains(file);
+        }
+
+        public void AddFileBeingEdited(string file)
+        {
+            ProtectedFiles.Add(file);
+        }
+
+        public void RemoveFileBeingEdited(string file)
+        {
+            ProtectedFiles.Remove(file);
         }
     }
 }

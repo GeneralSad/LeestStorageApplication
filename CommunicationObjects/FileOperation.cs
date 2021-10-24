@@ -12,14 +12,19 @@ namespace CommunicationObjects
     {
 
 
-        public static async Task FileFromByteArray(string directory, byte[] file)
+        public static async Task FileFromByteArray(string filePath, byte[] file)
         {
-            await File.WriteAllBytesAsync(directory, file);
+            await File.WriteAllBytesAsync(filePath, file);
         }
 
-        public static async Task<byte[]> FileToByteArray(string FilePath)
+        public static async Task<byte[]> FileToByteArray(string filePath)
         {
-            return await File.ReadAllBytesAsync(FilePath);
+            return await File.ReadAllBytesAsync(filePath);
+        }
+
+        public static void deleteFile(string filePath)
+        {
+            File.Delete(filePath);
         }
 
         

@@ -30,7 +30,7 @@ namespace LeestStorageServer
             new Thread(Run).Start();
         }
 
-        public async Task UpdateDirectoryIfEqual(string directory, string[] files)
+        public async Task UpdateDirectoryIfEqual(string directory, DirectoryFile[] files)
         {
             if (this.directoryLayer.CurrentDirectoryLayer == directory)
             {
@@ -121,11 +121,10 @@ namespace LeestStorageServer
             await this.client.Write(o);
         }
 
-        private async Task directoryRequest(string[] files)
+        private async Task directoryRequest(DirectoryFile[] files)
         {
             Console.WriteLine("Sending Updated Directory");
-            DirectoryFile[] directoryFiles = FileOperation.FileStringArrayToFileObjectArray(files);
-            var o = new { type = "Directory", files = directoryFiles };
+            var o = new { type = "Directory", files};
 
             await this.client.Write(o);
         }
@@ -133,9 +132,11 @@ namespace LeestStorageServer
         private async Task fileRequest(JObject jMessage)
         {
             string fileName = jMessage.Value<String>("fileName");
-            Console.WriteLine($"Start sending File {fileName}");
-
-            byte[] fileToByteArray = await FileOperation.FileToByteArray(this.directoryLayer.CurrentDirectoryLayer + @"\" + fileName);
+            string directory = this.directoryLayer.CurrentDirectoryLayer + @"\" + fileName;
+                               Console.WriteLine($"Start sending File {fileName}");
+            this.callback.AddFileBeingEdited(directory);
+            byte[] fileToByteArray = await FileOperation.FileToByteArray(directory);
+            this.callback.RemoveFileBeingEdited(directory);
             await this.client.Write(new { type = "DirectoryFile", fileName });
             await this.client.Write(fileToByteArray);
         }
@@ -152,9 +153,12 @@ namespace LeestStorageServer
         private async Task deleteRequest(JObject jMessage)
         {
             string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
-            Console.WriteLine($"deleting file {deleteFileLocation}");
-            File.Delete(deleteFileLocation);
-            this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
+            if (this.callback.CheckIfFileIsClearToEdit(deleteFileLocation))
+            {
+                Console.WriteLine($"deleting file {deleteFileLocation}");
+                FileOperation.deleteFile(deleteFileLocation);
+                this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
+            }
         }
 
 
