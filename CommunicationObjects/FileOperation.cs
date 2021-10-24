@@ -45,7 +45,7 @@ namespace CommunicationObjects
             return Directory.GetFileSystemEntries(directory);
         }
 
-        //This method puts (1) after the name of the file to make sure it does not overwrite an old file. This method only works for files with a "."
+        //This method puts (1) after the name of the file to make sure it does not overwrite an old file. This method only works for files with a '.'
         public static string ReturnAvailableFilePath(string filePath)
         {
             if (File.Exists(filePath))

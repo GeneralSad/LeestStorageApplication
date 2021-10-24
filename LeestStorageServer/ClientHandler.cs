@@ -76,22 +76,15 @@ namespace LeestStorageServer
                 case "OutOfDirectoryRequest":
                     await outOfDirectoryRequest();
                     break;
-
                 case "DirectoryRequest":
-
                     await directoryRequest();
                     break;
-
                 case "FileRequest":
-
                     await fileRequest(jMessage);
                     break;
-
                 case "FileUploadRequest":
-
                     await fileUploadRequest(jMessage);
                     break;
-
                 case "DeleteRequest":
                     await deleteRequest(jMessage);
                     break;
