@@ -11,10 +11,19 @@ namespace LeestStorageApplication
     {
 
         public string Name { get; set; }
+        public DateTime LastChanged { get; set; }
+        public string LastChangedText { get; set; } = "";
 
         public DirectoryFolder(string name)
         {
             this.Name = name;
+        }
+
+        public DirectoryFolder(string name, DateTime lastChanged)
+        {
+            this.Name = name;
+            this.LastChanged = lastChanged;
+            this.LastChangedText = "Last changed: " + lastChanged.ToString();
         }
 
         public string DetailInfo

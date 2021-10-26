@@ -45,9 +45,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel x:Name="InfoPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,0,2,0" MaxWidth="270" >
-                <TextBlock x:Name="NameBlock" Text="{Binding ElementName=DirectoryListView, Path=SelectedItem.Name}" TextWrapping="Wrap" FontWeight="Bold" FontSize="20"/>
-                <TextBlock x:Name="MoreInfoBlock" Text="{Binding ElementName=DirectoryListView, Path=SelectedItem.DetailInfo}" TextWrapping="Wrap" FontSize="16"/>
+            <StackPanel x:Name="InfoPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,0,2,0" MaxWidth="380" >
+                <TextBlock x:Name="NameBlock" Text="{Binding SelectedItem.Name}" TextWrapping="Wrap" FontWeight="Bold" FontSize="20"/>
+                <TextBlock x:Name="MoreInfoBlock" Text="{Binding SelectedItem.LastChangedText}" TextWrapping="Wrap" FontSize="16"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>

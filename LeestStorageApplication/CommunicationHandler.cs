@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -150,18 +151,18 @@ namespace LeestStorageApplication
             ObservableCollection<IDirectoryItem> itemList = new ObservableCollection<IDirectoryItem>();
             foreach (JObject jobject in jMessage.Value<JArray>("files"))
             {
-                DirectoryFile file = new DirectoryFile(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged"));
 
+                DirectoryFile file = new DirectoryFile(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged"));
                 string filename = file.Name.Substring(file.Name.LastIndexOf(@"\") + 1);
                 Debug.WriteLine(filename);
 
                 if (filename.Contains("."))
                 {
-                    itemList.Add(new DirectoryFile(filename));
+                    itemList.Add(new DirectoryFile(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged")));
                 }
                 else
                 {
-                    itemList.Add(new DirectoryFolder(filename));
+                    itemList.Add(new DirectoryFolder(jobject.Value<string>("Name"), jobject.Value<DateTime>("LastChanged")));
                 }
 
             }

@@ -5,9 +5,9 @@ namespace LeestStorageApplication
     class DirectoryFile : IDirectoryItem
     {
         public string Name { get; set; }
-        public string DetailInfo { get; }
         public DateTime LastChanged { get; set; }
-
+        public string DetailInfo { get; set; }
+        public string LastChangedText { get; set; }
 
         public DirectoryFile(string name)
         {
@@ -19,6 +19,7 @@ namespace LeestStorageApplication
             this.Name = name;
             this.DetailInfo = detailInfo;
             this.LastChanged = lastChanged;
+            this.LastChangedText = "Last changed: " + lastChanged.ToString();
         }
 
     }
