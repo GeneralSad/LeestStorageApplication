@@ -21,9 +21,8 @@ namespace LeestStorageApplication
     {
         private TcpClient tcpClient;
         private Client client;
-        private bool running { get; set; }
+        private bool Running { get; set; }
         private ItemListCallback listener;
-
 
         public CommunicationHandler(ItemListCallback listener)
         {
@@ -37,15 +36,11 @@ namespace LeestStorageApplication
            await this.client.Write(message);
         }
 
-
-
         public async Task Reload()
         {
             await this.client.Write(new { type = "DirectoryRequest" });
             Debug.WriteLine("Reloaded");
         }
-        
-
 
         public async Task DeleteRequest(string fileName)
         {
@@ -83,13 +78,18 @@ namespace LeestStorageApplication
             Debug.WriteLine("Upload: " + file);
         }
 
+        public async Task CreateFolderRequest(string folderName)
+        {
+            await this.client.Write(new { type = "CreateFolderRequest", folderName = folderName });
+            Debug.WriteLine("Created folder: " + folderName);
+        }
+
         public async Task CloseConnection()
         {
             await this.client.Write(new { type = "CloseConnection"});
             Debug.WriteLine("Closing connection");
             this.Disable();
         }
-
 
         private async void Run()
         {
@@ -99,8 +99,8 @@ namespace LeestStorageApplication
             this.client = new Client(tcpClient);
 
             await this.Reload();
-            this.running = true;
-            while (running)
+            this.Running = true;
+            while (Running)
             {
                 try
                 {
@@ -173,7 +173,7 @@ namespace LeestStorageApplication
 
         public void Disable()
         {
-            this.running = false;
+            this.Running = false;
         }
 
     }

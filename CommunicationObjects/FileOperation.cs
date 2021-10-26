@@ -37,7 +37,6 @@ namespace CommunicationObjects
                 Directory.Delete(filePath);
             }
         }
-
         
         public static DirectoryFile[] FileStringArrayToFileObjectArray(string[] files)
         {
@@ -54,6 +53,28 @@ namespace CommunicationObjects
             return directoryFiles;
         }
         
+        public static void CreateDirectory(string DirectoryPath)
+        {
+            try
+            {
+                // Determine whether the directory exists.
+                if (Directory.Exists(DirectoryPath))
+                {
+                    Console.WriteLine("That path exists already.");
+                    return;
+                }
+
+                // Try to create the directory.
+                DirectoryInfo di = Directory.CreateDirectory(DirectoryPath);
+                Console.WriteLine("The directory was created at {0}.", Directory.GetCreationTime(DirectoryPath));
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The process failed: {0}", e.ToString());
+            }
+
+        }
 
         // @"\FilesForTransfer"
         public static string[] ReturnFilesFromDirectory(string directory)

@@ -15,77 +15,91 @@ namespace LeestStorageApplication
     public class ViewModel : BindableBase, INotifyPropertyChanged, ItemListCallback
     {
 
-        public DelegateCommand<object> cBack { get; private set; }
-        public DelegateCommand<object> cReload { get; private set; }
-        public DelegateCommand<object> cDownload { get; private set; }
-        public DelegateCommand<object> cUpload { get; private set; }
-        public DelegateCommand<object> cDelete { get; private set; }
-        public DelegateCommand<object> cEnterFile { get; private set; }
+        public DelegateCommand cBack { get; private set; }
+        public DelegateCommand cReload { get; private set; }
+        public DelegateCommand cDownload { get; private set; }
+        public DelegateCommand cUpload { get; private set; }
+        public DelegateCommand cDelete { get; private set; }
+        public DelegateCommand cEnterFile { get; private set; }
+        public DelegateCommand cToggleCreateFolder { get; private set; }
+        public DelegateCommand cCreateFolder { get; private set; }
 
         public ObservableCollection<IDirectoryItem> Items { get; set; }
 
-        private OpenFileDialog openFileDialog { get; set; }
+        private OpenFileDialog OpenFileDialog { get; set; }
 
-        private CommunicationHandler handler { get; set; }
+        private CommunicationHandler Handler { get; set; }
 
         public ViewModel()
         {
-            this.handler = new CommunicationHandler(this);
+            this.Handler = new CommunicationHandler(this);
 
-            cBack = new DelegateCommand<object>(Back, canSubmit);
-            cReload = new DelegateCommand<object>(Reload, canSubmit);
-            cDownload = new DelegateCommand<object>(Download, canSubmit);
-            cUpload = new DelegateCommand<object>(Upload, canSubmit);
-            cDelete = new DelegateCommand<object>(Delete, canSubmit);
-            cEnterFile = new DelegateCommand<object>(EnterFile, canSubmit);
+            cBack = new DelegateCommand(Back);
+            cReload = new DelegateCommand(Reload);
+            cDownload = new DelegateCommand(Download);
+            cUpload = new DelegateCommand(Upload);
+            cDelete = new DelegateCommand(Delete);
+            cEnterFile = new DelegateCommand(EnterFile);
+            cToggleCreateFolder = new DelegateCommand(ToggleCreateFolder);
+            cCreateFolder = new DelegateCommand(CreateFolder);
 
             Items = new ObservableCollection<IDirectoryItem>();
         }
 
         public IDirectoryItem SelectedItem { get; set; }
+        public ListView Listview { get; set; }
+        public bool PopupVisible { get; set; }
+        public string PopupFolderName { get; set; }
 
-        public bool canSubmit(object parameter)
+        public async void Reload()
         {
-            return true;
+           await this.Handler.Reload();
         }
 
-        public async void Reload(object parameter)
+        public async void Download()
         {
-            await this.handler.Reload();
-        }
-
-        public async void Download(object parameter)
-        {
-            ListView listView = (ListView)parameter;
-            int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
-            if (number != -1)
+            int number = Items.IndexOf(SelectedItem);
+            if(number != -1)
             {
-                await this.handler.DownloadRequest(this.Items[number].Name);
+                await this.Handler.DownloadRequest(this.Items[number].Name);
             }
         }
 
-        public async void Upload(object parameter)
+        public async void Upload()
         {
-            openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "Select file to upload";
-            openFileDialog.Multiselect = false;
-            openFileDialog.ValidateNames = true;
-            Nullable<bool> result = openFileDialog.ShowDialog();
+            OpenFileDialog = new OpenFileDialog();
+            OpenFileDialog.Title = "Select file to upload";
+            OpenFileDialog.Multiselect = false;
+            OpenFileDialog.ValidateNames = true;
+            Nullable<bool> result = OpenFileDialog.ShowDialog();
 
             if (result == true)
             {
-                await this.handler.UploadRequest(openFileDialog.FileName);
-                Debug.WriteLine(openFileDialog.FileName);
+                await this.Handler.UploadRequest(OpenFileDialog.FileName);
+                Debug.WriteLine(OpenFileDialog.FileName);
             }
 
             Debug.WriteLine("Upload");
         }
 
-        public async void Delete(object parameter)
+        public void ToggleCreateFolder()
         {
 
-            ListView listView = (ListView)parameter;
-            int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
+            PopupVisible = !PopupVisible;
+
+        }
+
+        public async void CreateFolder()
+        {
+            PopupVisible = false;
+            await this.Handler.CreateFolderRequest(PopupFolderName);
+            Debug.WriteLine("Creating: " + PopupFolderName);
+            PopupFolderName = "";
+        }
+
+        public async void Delete()
+        {
+            int number = Items.IndexOf(SelectedItem);
             if (number != -1)
             {
                 string fileName = this.Items[number].Name;
@@ -106,18 +120,23 @@ namespace LeestStorageApplication
                 MessageBoxResult messageBoxResult = messageBoxResult = MessageBox.Show(messageBoxText, "Confirm delete operation", MessageBoxButton.YesNo);
 
 
+
+
+
                 if (messageBoxResult == MessageBoxResult.Yes)
+
                 {
-                    await this.handler.DeleteRequest(fileName);
+
+                    await this.Handler.DeleteRequest(fileName);
+
                 }
             }
         }
 
         //This button is not async because allowing the user to use other buttons while loading will break the application
-        public async void EnterFile(object parameter)
+        public async void EnterFile()
         {
-            ListView listView = (ListView)parameter;
-            int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
+            int number = Items.IndexOf(SelectedItem);
 
             if (number != -1)
             {
@@ -125,14 +144,14 @@ namespace LeestStorageApplication
                 Debug.WriteLine("Enter: " + directory);
                 if (!directory.Contains("."))
                 {
-                    await this.handler.IntoDirectoryRequest(directory);
+                   await this.Handler.IntoDirectoryRequest(directory);
                 }
             }
         }
 
-        public async void Back(object parameter)
+        public async void Back()
         {
-            await this.handler.OutOfDirectoryRequest();
+            await this.Handler.OutOfDirectoryRequest();
             Debug.WriteLine("Back");
         }
 
@@ -143,9 +162,10 @@ namespace LeestStorageApplication
 
         public async void Window_Closed(object sender, EventArgs e)
         {
-            await this.handler.CloseConnection();
+            await this.Handler.CloseConnection();
 
         }
+
     }
 
 }

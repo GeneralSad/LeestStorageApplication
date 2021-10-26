@@ -12,28 +12,35 @@
         Width="800"
         Height="400">
 
-    <!--<Window.DataContext>
-        <local:ViewModel/>
-    </Window.DataContext>-->
-
     <StackPanel x:Name="MainPanel">
         <StackPanel x:Name="ButtonStackPanel" Orientation="Horizontal" Margin="0,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
 
             <Button x:Name="BackButton" Command="{Binding cBack}" Content="Back" Margin="5,0,0,0"/>
             <Button x:Name="ReloadButton" Command="{Binding cReload}" Content="Reload" Margin="5,0,0,0"/>
             <Button x:Name="DownloadButton" Command="{Binding cDownload}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Download" Margin="5,0,0,0"/>
-            <Button x:Name="UploadButton" Command="{Binding cUpload}" Content="Upload" Margin="5,0,0,0"/>
+            <RibbonSplitButton x:Name="UploadButton" Label="Upload" Command="{Binding cUpload}" BorderBrush="#FF707070" Background="#FFC1C1C1" FocusedBackground="#FF999999" FocusedBorderBrush="#FF666666" MouseOverBackground="#FFC1C1C1" MouseOverBorderBrush="#FF4F4F4F" PressedBackground="#FF999999" PressedBorderBrush="#FF4F4F4F" CheckedBackground="#FFC1C1C1" CheckedBorderBrush="#FF4F4F4F" Margin="5,0,0,0">
+                <Button Command="{Binding cToggleCreateFolder}" Content="Create folder"/>
+            </RibbonSplitButton>
+
+            <Popup IsOpen="{Binding PopupVisible}" Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Scroll">
+                <StackPanel Background="White">
+                    <Label Content="Enter folder name" Background="White" Margin="5,5,5,5"/>
+                    <TextBox Text="{Binding PopupFolderName}" Margin="5,0,5,5"/>
+                    <Button Content="Create" Command="{ Binding cCreateFolder }" Margin="5,0,5,5"/>
+                    <Button Content="Cancel" Command="{ Binding cCreateFolder }" Margin="5,0,5,5"/>
+                </StackPanel>
+            </Popup>
             <Button x:Name="DeleteButton" Command="{Binding cDelete}" CommandParameter="{Binding ElementName=DirectoryListView}" Content="Delete" Margin="5,0,0,0"/>
         </StackPanel>
         <StackPanel x:Name="ContentStackPanel" Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <ListView x:Name="DirectoryListView" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" MinWidth="400" MinHeight="300" HorizontalContentAlignment="Left">
+            <ListView x:Name="DirectoryListView" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" Width="400" Height="300" HorizontalContentAlignment="Left">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <StackPanel.InputBindings>
                                 <MouseBinding Gesture="LeftDoubleClick" Command="{Binding DataContext.cEnterFile, RelativeSource={RelativeSource AncestorType=ListView}}" CommandParameter="{Binding ElementName=DirectoryListView}"/>
                             </StackPanel.InputBindings>
-                            <Label Content="{Binding Name}" Padding="5,5,300,5"/>
+                            <Label Content="{Binding Name}" Padding="5,5,5,5"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -16,7 +16,7 @@ namespace LeestStorageServer
     {
         private TcpClient tcpClient;
         private Client client;
-        private bool running { get; set; }
+        private bool Running { get; set; }
         private DirectoryLayer directoryLayer;
         private ServerCallback callback;
 
@@ -34,23 +34,21 @@ namespace LeestStorageServer
         {
             if (this.directoryLayer.CurrentDirectoryLayer == directory)
             {
-                await directoryRequest(files);
+                await DirectoryRequest(files);
             }
         }
 
-
-
         private async void Run()
         {
-            this.running = true;
-            while (running)
+            this.Running = true;
+            while (Running)
             {
                 try
                 {
                     string message = Encoding.ASCII.GetString(await this.client.Read());
                     JObject jMessage = (JObject)JsonConvert.DeserializeObject(message);
 
-                    await handleMessage(jMessage);
+                    await HandleMessage(jMessage);
 
                     Console.WriteLine(message);
                 } catch (Exception e)
@@ -62,7 +60,7 @@ namespace LeestStorageServer
         }
 
 
-        private async Task handleMessage(JObject jMessage)
+        private async Task HandleMessage(JObject jMessage)
         {
             if (jMessage == null)
             {
@@ -71,46 +69,48 @@ namespace LeestStorageServer
             switch (jMessage.Value<string>("type"))
             {
                 case "IntoDirectoryRequest":
-                    await intoDirectoryRequest(jMessage);
+                    await IntoDirectoryRequest(jMessage);
                     break;
                 case "OutOfDirectoryRequest":
-                    await outOfDirectoryRequest();
+                    await OutOfDirectoryRequest();
                     break;
                 case "DirectoryRequest":
-                    await directoryRequest();
+                    await DirectoryRequest();
                     break;
                 case "FileRequest":
-                    await fileRequest(jMessage);
+                    await FileRequest(jMessage);
                     break;
                 case "FileUploadRequest":
-                    await fileUploadRequest(jMessage);
+                    await FileUploadRequest(jMessage);
+                    break;
+                case "CreateFolderRequest":
+                    CreateFolderRequest(jMessage);
                     break;
                 case "DeleteRequest":
-                    await deleteRequest(jMessage);
+                    await DeleteRequest(jMessage);
                     break;
                 case "CloseConnection":
-                    closeConnection();
+                    CloseConnection();
                     break;
             }
         }
 
-
-        private async Task intoDirectoryRequest(JObject jMessage)
+        private async Task IntoDirectoryRequest(JObject jMessage)
         {
             Console.WriteLine("updating current directory");
             string directoryName = jMessage.Value<String>("directoryName");
             this.directoryLayer.AddDirectoryLayer(@"\" + directoryName);
-            await directoryRequest();
+            await DirectoryRequest();
         }
 
-        private async Task outOfDirectoryRequest()
+        private async Task OutOfDirectoryRequest()
         {
             Console.WriteLine("Going back to former directory");
             this.directoryLayer.RemoveDirectoryLayer();
-            await directoryRequest();
+            await DirectoryRequest();
         }
 
-        private async Task directoryRequest()
+        private async Task DirectoryRequest()
         {
             Console.WriteLine("Sending Updated Directory");
             String[] files = FileOperation.ReturnFilesFromDirectory(this.directoryLayer.CurrentDirectoryLayer);
@@ -121,7 +121,7 @@ namespace LeestStorageServer
             await this.client.Write(o);
         }
 
-        private async Task directoryRequest(DirectoryFile[] files)
+        private async Task DirectoryRequest(DirectoryFile[] files)
         {
             Console.WriteLine("Sending Updated Directory");
             var o = new { type = "Directory", files};
@@ -129,7 +129,7 @@ namespace LeestStorageServer
             await this.client.Write(o);
         }
 
-        private async Task fileRequest(JObject jMessage)
+        private async Task FileRequest(JObject jMessage)
         {
             string fileName = jMessage.Value<String>("fileName");
             string directory = this.directoryLayer.CurrentDirectoryLayer + @"\" + fileName;
@@ -142,7 +142,7 @@ namespace LeestStorageServer
         }
 
 
-        private async Task fileUploadRequest(JObject jMessage)
+        private async Task FileUploadRequest(JObject jMessage)
         {
             Console.WriteLine("Start receiving File");
             string file = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
@@ -150,7 +150,15 @@ namespace LeestStorageServer
             this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
         }
 
-        private async Task deleteRequest(JObject jMessage)
+        private void CreateFolderRequest(JObject jMessage)
+        {
+            Console.WriteLine("Start receiving Folder");
+            string FolderPath = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("folderName");
+            FileOperation.CreateDirectory(FolderPath);
+            this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
+        }
+
+        private async Task DeleteRequest(JObject jMessage)
         {
             string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
             if (this.callback.CheckIfFileIsClearToEdit(deleteFileLocation))
@@ -162,17 +170,17 @@ namespace LeestStorageServer
         }
 
 
-        private void closeConnection()
+        private void CloseConnection()
         {
             Console.WriteLine($"Closing connection: {this}");
-            this.running = false;
+            this.Running = false;
             this.callback.RemoveClientHandlerFromList(this);
         }
 
         public async void Disable()
         {
             await this.client.Write(new { type = "CloseConnection"});
-            this.running = false;
+            this.Running = false;
             this.callback.RemoveClientHandlerFromList(this);
         }
     }
