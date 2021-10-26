@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,6 +29,7 @@ namespace LeestStorageServer
             new Thread(Run).Start();
         }
 
+        //Updates the directory if the current directory is equal to the given directory
         public async Task UpdateDirectoryIfEqual(string directory, DirectoryFile[] files)
         {
             if (this.directoryLayer.CurrentDirectoryLayer == directory)
@@ -59,7 +59,7 @@ namespace LeestStorageServer
             this.client.Terminate();
         }
 
-
+        //When a message has been received this method will sort out what to do with this message
         private async Task HandleMessage(JObject jMessage)
         {
             if (jMessage == null)
@@ -95,6 +95,7 @@ namespace LeestStorageServer
             }
         }
 
+        //Jump into the requested directory
         private async Task IntoDirectoryRequest(JObject jMessage)
         {
             Console.WriteLine("updating current directory");
@@ -103,6 +104,7 @@ namespace LeestStorageServer
             await DirectoryRequest();
         }
 
+        //Jump out of the current directory
         private async Task OutOfDirectoryRequest()
         {
             Console.WriteLine("Going back to former directory");
@@ -110,6 +112,7 @@ namespace LeestStorageServer
             await DirectoryRequest();
         }
 
+        //Get all files from the directory
         private async Task DirectoryRequest()
         {
             Console.WriteLine("Sending Updated Directory");
@@ -129,6 +132,7 @@ namespace LeestStorageServer
             await this.client.Write(o);
         }
 
+        //Handle request for a specific file
         private async Task FileRequest(JObject jMessage)
         {
             string fileName = jMessage.Value<String>("fileName");
@@ -141,7 +145,7 @@ namespace LeestStorageServer
             await this.client.Write(fileToByteArray);
         }
 
-
+        //Handle request to receive file
         private async Task FileUploadRequest(JObject jMessage)
         {
             Console.WriteLine("Start receiving File");
@@ -150,6 +154,7 @@ namespace LeestStorageServer
             this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
         }
 
+        //Handle request to create a folder
         private void CreateFolderRequest(JObject jMessage)
         {
             Console.WriteLine("Start receiving Folder");
@@ -158,6 +163,7 @@ namespace LeestStorageServer
             this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
         }
 
+        //Handle a request to delete a file or folder
         private async Task DeleteRequest(JObject jMessage)
         {
             string deleteFileLocation = this.directoryLayer.CurrentDirectoryLayer + @"\" + jMessage.Value<String>("fileName");
@@ -168,7 +174,6 @@ namespace LeestStorageServer
                 this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
             }
         }
-
 
         private void CloseConnection()
         {

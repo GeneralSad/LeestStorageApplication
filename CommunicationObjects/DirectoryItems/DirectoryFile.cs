@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeestStorageApplication
 {
@@ -24,7 +20,6 @@ namespace LeestStorageApplication
             this.DetailInfo = detailInfo;
             this.LastChanged = lastChanged;
         }
-
 
     }
 }

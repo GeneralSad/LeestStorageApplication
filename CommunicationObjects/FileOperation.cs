@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using LeestStorageApplication;
 
@@ -10,7 +7,6 @@ namespace CommunicationObjects
 {
     class FileOperation
     {
-
 
         public static async Task FileFromByteArray(string filePath, byte[] file)
         {

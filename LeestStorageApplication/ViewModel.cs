@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using Prism.Services.Dialogs;
 
 namespace LeestStorageApplication
 {
@@ -51,11 +50,13 @@ namespace LeestStorageApplication
         public bool PopupVisible { get; set; }
         public string PopupFolderName { get; set; }
 
+        //Request to reload the file structure of the server
         public async void Reload()
         {
            await this.Handler.Reload();
         }
 
+        //Request to download a file from the server
         public async void Download()
         {
             int number = Items.IndexOf(SelectedItem);
@@ -65,6 +66,7 @@ namespace LeestStorageApplication
             }
         }
 
+        //Upload a file to the server
         public async void Upload()
         {
             OpenFileDialog = new OpenFileDialog();
@@ -82,13 +84,13 @@ namespace LeestStorageApplication
             Debug.WriteLine("Upload");
         }
 
+        //Toggle the visibility of the popup
         public void ToggleCreateFolder()
         {
-
             PopupVisible = !PopupVisible;
-
         }
 
+        //Set popup visbility to false and send message to server to create a folder
         public async void CreateFolder()
         {
             PopupVisible = false;
@@ -97,6 +99,7 @@ namespace LeestStorageApplication
             PopupFolderName = "";
         }
 
+        //Delete a file or folder and give a confirmation prompt to make sure
         public async void Delete()
         {
             int number = Items.IndexOf(SelectedItem);
@@ -117,14 +120,9 @@ namespace LeestStorageApplication
                     messageBoxText = "Are you sure you want to delete this folder and all of the files in it?";
                 }
 
-                MessageBoxResult messageBoxResult = messageBoxResult = MessageBox.Show(messageBoxText, "Confirm delete operation", MessageBoxButton.YesNo);
-
-
-
-
+                MessageBoxResult messageBoxResult = MessageBox.Show(messageBoxText, "Confirm delete operation", MessageBoxButton.YesNo);
 
                 if (messageBoxResult == MessageBoxResult.Yes)
-
                 {
 
                     await this.Handler.DeleteRequest(fileName);
@@ -149,6 +147,7 @@ namespace LeestStorageApplication
             }
         }
 
+        //Navigate to the previous folder in the file path
         public async void Back()
         {
             await this.Handler.OutOfDirectoryRequest();

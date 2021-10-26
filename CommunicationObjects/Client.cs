@@ -20,6 +20,7 @@ namespace LeestStorageServer
             this.stream = client.GetStream();
         }
 
+        //Wrap the message to make it ready to send
         private static byte[] WrapMessage(byte[] message)
         {
             // Get the length prefix for the message
@@ -31,6 +32,7 @@ namespace LeestStorageServer
             return ret;
         }
 
+        //Write the object
         public async Task Write(Object message)
         {
             try
@@ -45,6 +47,7 @@ namespace LeestStorageServer
             }
         }
 
+        //Write the message
         public async Task Write(byte[] message)
         {
             try
@@ -59,11 +62,13 @@ namespace LeestStorageServer
             }
         }
 
+        //Convert the object to json
         public static string ToJsonMessage<T>( T t)
         {
             return JsonConvert.SerializeObject(t); 
         }
 
+        //Read the stream for messages
         public async Task<byte[]> Read()
         {
             byte[] length = new byte[4];
@@ -84,6 +89,7 @@ namespace LeestStorageServer
             return received;
         }
 
+        //Terminate connection to the client
         public void Terminate()
         {
             this.client.Close();

@@ -17,12 +17,14 @@ namespace CommunicationObjects
             this.Layer = 0;
         }
 
+        //Add a layer to the directory
         public void AddDirectoryLayer(string directory)
         {
             this.CurrentDirectoryLayer += directory;
             this.Layer++;
         }
 
+        //Remove a layer from the directory
         public void RemoveDirectoryLayer()
         {
             if (this.Layer > 0)

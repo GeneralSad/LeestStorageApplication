@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -31,35 +27,42 @@ namespace LeestStorageApplication
             new Thread(Run).Start();
         }
 
+        //Send a message to the server
         public async Task SendMessage(object message)
         {
            await this.client.Write(message);
         }
 
+        //Send a Request to reload
         public async Task Reload()
         {
             await this.client.Write(new { type = "DirectoryRequest" });
             Debug.WriteLine("Reloaded");
         }
 
+        //Send a request to delete a file or folder
         public async Task DeleteRequest(string fileName)
         {
             await this.client.Write(new { type = "DeleteRequest", fileName });
             Debug.WriteLine("Download: " + fileName);
         }
 
+        //Send a request to jump into a directory
         public async Task IntoDirectoryRequest(string directoryName)
         {
             await this.client.Write(new { type = "IntoDirectoryRequest", directoryName });
             Debug.WriteLine("Going into directory: " + directoryName);
         }
 
+        //Send a request to jump into a directory
         public async Task OutOfDirectoryRequest()
         {
             await this.client.Write(new { type = "OutOfDirectoryRequest" });
             Debug.WriteLine("Out of directory");
 
         }
+
+        //Send a request to download a file
         public async Task DownloadRequest(string fileName)
         {
             if (fileName.Contains("."))
@@ -70,6 +73,7 @@ namespace LeestStorageApplication
 
         }
 
+        //Send a file to the server
         public async Task UploadRequest(string file)
         {
             byte[] fileToByteArray = await FileOperation.FileToByteArray(file);
@@ -78,12 +82,14 @@ namespace LeestStorageApplication
             Debug.WriteLine("Upload: " + file);
         }
 
+        //Send a request to create a folder
         public async Task CreateFolderRequest(string folderName)
         {
             await this.client.Write(new { type = "CreateFolderRequest", folderName = folderName });
             Debug.WriteLine("Created folder: " + folderName);
         }
 
+        //Close the connection to the server
         public async Task CloseConnection()
         {
             await this.client.Write(new { type = "CloseConnection"});
@@ -127,7 +133,7 @@ namespace LeestStorageApplication
             switch (jMessage.Value<string>("type"))
             {
                 case "Directory":
-                    directory(jMessage);
+                    Directory(jMessage);
                     break;
                 case "DirectoryFile":
                     await DirectoryFile(jMessage);
@@ -139,7 +145,7 @@ namespace LeestStorageApplication
             }
         }
 
-        private void directory(JObject jMessage)
+        private void Directory(JObject jMessage)
         {
             ObservableCollection<IDirectoryItem> itemList = new ObservableCollection<IDirectoryItem>();
             foreach (JObject jobject in jMessage.Value<JArray>("files"))
