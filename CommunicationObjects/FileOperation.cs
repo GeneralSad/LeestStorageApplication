@@ -22,7 +22,7 @@ namespace CommunicationObjects
             return await File.ReadAllBytesAsync(filePath);
         }
 
-        public static void deleteFile(string filePath)
+        public static void DeleteFileOrDirectory(string filePath)
         {
             if (filePath.Contains("."))
             {
@@ -32,7 +32,7 @@ namespace CommunicationObjects
             {
                 foreach (var fileInDirectoryPath in ReturnFilesFromDirectory(filePath))
                 {
-                    deleteFile(fileInDirectoryPath);
+                    DeleteFileOrDirectory(fileInDirectoryPath);
                 }
                 Directory.Delete(filePath);
             }

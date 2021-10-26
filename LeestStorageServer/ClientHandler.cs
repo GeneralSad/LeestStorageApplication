@@ -156,7 +156,7 @@ namespace LeestStorageServer
             if (this.callback.CheckIfFileIsClearToEdit(deleteFileLocation))
             {
                 Console.WriteLine($"deleting file {deleteFileLocation}");
-                FileOperation.deleteFile(deleteFileLocation);
+                FileOperation.DeleteFileOrDirectory(deleteFileLocation);
                 this.callback.RefreshDirectoryForAllClientsInDirectory(this.directoryLayer.CurrentDirectoryLayer);
             }
         }

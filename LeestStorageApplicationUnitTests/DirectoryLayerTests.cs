@@ -12,8 +12,6 @@ namespace LeestStorageApplicationUnitTests
     [TestClass]
     public class DirectoryLayerTests
     {
-
-        
         [TestMethod]
         public void DirectoryLayerDefaultValuesAreCorrect()
         {
