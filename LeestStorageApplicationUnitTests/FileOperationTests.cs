@@ -23,7 +23,6 @@ namespace LeestStorageApplicationUnitTests
 
             var byteArray = await FileOperation.FileToByteArray(downloadLocation);
 
-
             Assert.IsInstanceOfType(byteArray, typeof(byte[]), "FileToByteArray does not return a byte array"); 
         }
 

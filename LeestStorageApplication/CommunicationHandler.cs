@@ -67,8 +67,11 @@ namespace LeestStorageApplication
         }
         public async Task DownloadRequest(string fileName)
         {
-            await this.client.Write(new { type = "FileRequest", fileName});
-            Debug.WriteLine("Download: " + fileName);
+            if (fileName.Contains("."))
+            {
+                await this.client.Write(new {type = "FileRequest", fileName});
+                Debug.WriteLine("Download: " + fileName);
+            }
 
         }
 

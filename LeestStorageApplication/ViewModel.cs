@@ -5,7 +5,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
+using Prism.Services.Dialogs;
 
 namespace LeestStorageApplication
 {
@@ -66,14 +68,14 @@ namespace LeestStorageApplication
 
         public async void Reload(object parameter)
         {
-           await this.handler.Reload();
+            await this.handler.Reload();
         }
 
         public async void Download(object parameter)
         {
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
-            if(number != -1)
+            if (number != -1)
             {
                 await this.handler.DownloadRequest(this.Items[number].Name);
             }
@@ -87,7 +89,7 @@ namespace LeestStorageApplication
             openFileDialog.ValidateNames = true;
             Nullable<bool> result = openFileDialog.ShowDialog();
 
-            if(result == true)
+            if (result == true)
             {
                 await this.handler.UploadRequest(openFileDialog.FileName);
                 Debug.WriteLine(openFileDialog.FileName);
@@ -98,13 +100,34 @@ namespace LeestStorageApplication
 
         public async void Delete(object parameter)
         {
+
             ListView listView = (ListView)parameter;
             int number = Items.IndexOf((IDirectoryItem)listView.SelectedItem);
             if (number != -1)
             {
-                await this.handler.DeleteRequest(this.Items[number].Name);
+                string fileName = this.Items[number].Name;
+                Debug.WriteLine($@"Delete: {number} {fileName}");
+
+                string messageBoxText;
+
+
+                if (fileName.Contains('.'))
+                {
+                    messageBoxText = "Are you sure you want to delete this File?";
+                }
+                else
+                {
+                    messageBoxText = "Are you sure you want to delete this folder and all of the files in it?";
+                }
+
+                MessageBoxResult messageBoxResult = messageBoxResult = MessageBox.Show(messageBoxText, "Confirm delete operation", MessageBoxButton.YesNo);
+
+
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    await this.handler.DeleteRequest(fileName);
+                }
             }
-            Debug.WriteLine("Delete: " + number);
         }
 
         //This button is not async because allowing the user to use other buttons while loading will break the application
@@ -119,7 +142,7 @@ namespace LeestStorageApplication
                 Debug.WriteLine("Enter: " + directory);
                 if (!directory.Contains("."))
                 {
-                   await this.handler.IntoDirectoryRequest(directory);
+                    await this.handler.IntoDirectoryRequest(directory);
                 }
             }
         }

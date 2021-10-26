@@ -24,7 +24,18 @@ namespace CommunicationObjects
 
         public static void deleteFile(string filePath)
         {
-            File.Delete(filePath);
+            if (filePath.Contains("."))
+            {
+                File.Delete(filePath);
+            }
+            else
+            {
+                foreach (var fileInDirectoryPath in ReturnFilesFromDirectory(filePath))
+                {
+                    deleteFile(fileInDirectoryPath);
+                }
+                Directory.Delete(filePath);
+            }
         }
 
         
