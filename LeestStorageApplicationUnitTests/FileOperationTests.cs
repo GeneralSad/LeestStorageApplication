@@ -13,11 +13,17 @@ namespace LeestStorageApplicationUnitTests
     public class FileOperationTests
     {
         [TestMethod]
-        public async Task ReturnFilesFromDirectoryTest()
+        public async Task FilefromByteThrowsExceptionOnNullByteArrayTest()
         {
+            byte[] file = null;
 
-            await Assert.ThrowsExceptionAsync<FileNotFoundException>(async() => await FileOperation.FileToByteArray("#WrongDirectory"), "A byte array was returned without a proper filePath");
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await FileOperation.FileFromByteArray("_]a;';l#WrongDirectory", file), "A byte array was returned without a proper filePath");
         }
 
+        [TestMethod]
+        public async Task FileToByteThrowsExceptionOnWrongFilePathTest()
+        {
+            await Assert.ThrowsExceptionAsync<FileNotFoundException>(async() => await FileOperation.FileToByteArray("_]a;';l#WrongDirectory"), "A byte array was returned without a proper filePath");
+        }
     }
 }
