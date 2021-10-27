@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>7568f0ef-8408-4d26-b491-33f143f9c1f7</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>CommunicationObjects</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\DirectoryFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\DirectoryFolder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryLayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileOperation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DirectoryItems\IDirectoryItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerAddress.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)DirectoryItems\" />
+  </ItemGroup>
+</Project>

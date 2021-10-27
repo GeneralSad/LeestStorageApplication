@@ -1,12 +1,23 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace LeestStorageServer
 {
     class Program
     {
-        static void Main(string[] args)
+
+        private static Server server;
+        public static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
+
+            server = new Server();
+            await server.Start();
+        }
+
+        static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        {
+            server.Disable();
         }
     }
 }

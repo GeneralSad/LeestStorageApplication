@@ -5,9 +5,25 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeestStorageApplication", "LeestStorageApplication\LeestStorageApplication.csproj", "{53E71EA2-E8A6-4DB2-9B1A-71CA7A9B684E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeestStorageServer", "LeestStorageServer\LeestStorageServer.csproj", "{9A3D9A82-CF5E-42BE-8AEB-95A9050153EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeestStorageServer", "LeestStorageServer\LeestStorageServer.csproj", "{9A3D9A82-CF5E-42BE-8AEB-95A9050153EA}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CommunicationObjects", "CommunicationObjects\CommunicationObjects.shproj", "{7568F0EF-8408-4D26-B491-33F143F9C1F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeestStorageApplicationUnitTests", "LeestStorageApplicationUnitTests\LeestStorageApplicationUnitTests.csproj", "{057C9E2B-F611-465E-8B16-2F3BD1F0C137}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9A3D9A82-CF5E-42BE-8AEB-95A9050153EA} = {9A3D9A82-CF5E-42BE-8AEB-95A9050153EA}
+		{53E71EA2-E8A6-4DB2-9B1A-71CA7A9B684E} = {53E71EA2-E8A6-4DB2-9B1A-71CA7A9B684E}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeestStorageServerTest", "LeestStorageServerTest\LeestStorageServerTest.csproj", "{2EBE4761-0AA5-42A6-8081-07B07CFD60FB}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		CommunicationObjects\CommunicationObjects.projitems*{057c9e2b-f611-465e-8b16-2f3bd1f0c137}*SharedItemsImports = 5
+		CommunicationObjects\CommunicationObjects.projitems*{53e71ea2-e8a6-4db2-9b1a-71ca7a9b684e}*SharedItemsImports = 5
+		CommunicationObjects\CommunicationObjects.projitems*{7568f0ef-8408-4d26-b491-33f143f9c1f7}*SharedItemsImports = 13
+		CommunicationObjects\CommunicationObjects.projitems*{9a3d9a82-cf5e-42be-8aeb-95a9050153ea}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -21,6 +37,14 @@ Global
 		{9A3D9A82-CF5E-42BE-8AEB-95A9050153EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A3D9A82-CF5E-42BE-8AEB-95A9050153EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A3D9A82-CF5E-42BE-8AEB-95A9050153EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{057C9E2B-F611-465E-8B16-2F3BD1F0C137}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{057C9E2B-F611-465E-8B16-2F3BD1F0C137}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{057C9E2B-F611-465E-8B16-2F3BD1F0C137}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{057C9E2B-F611-465E-8B16-2F3BD1F0C137}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EBE4761-0AA5-42A6-8081-07B07CFD60FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EBE4761-0AA5-42A6-8081-07B07CFD60FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EBE4761-0AA5-42A6-8081-07B07CFD60FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EBE4761-0AA5-42A6-8081-07B07CFD60FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
