@@ -23,7 +23,7 @@ namespace LeestStorageApplication
         {
             this.Name = name;
             this.LastChanged = lastChanged;
-            this.LastChangedText = "Last changed: " + lastChanged.ToString();
+            this.LastChangedText = "Last Changed: " + lastChanged.ToString();
         }
 
         public string DetailInfo

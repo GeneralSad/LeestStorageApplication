@@ -21,6 +21,8 @@ namespace LeestStorageApplication
         private bool Running { get; set; }
         private ItemListCallback listener;
 
+        private string DownloadLocation;
+
         public CommunicationHandler(ItemListCallback listener)
         {
             this.tcpClient = new TcpClient();
@@ -64,13 +66,12 @@ namespace LeestStorageApplication
         }
 
         //Send a request to download a file
-        public async Task DownloadRequest(string fileName)
+        public async Task DownloadRequest(string fileName, string downloadLocation)
         {
-            if (fileName.Contains("."))
-            {
-                await this.client.Write(new {type = "FileRequest", fileName});
-                Debug.WriteLine("Download: " + fileName);
-            }
+
+            this.DownloadLocation = downloadLocation;
+            await this.client.Write(new {type = "FileRequest", fileName});
+            Debug.WriteLine("Download: " + fileName);
 
         }
 
@@ -172,7 +173,7 @@ namespace LeestStorageApplication
 
         private async Task DirectoryFile(JObject jMessage)
         {
-            string downloadLocation = new KnownFolder(KnownFolderType.Downloads).Path;
+            string downloadLocation = this.DownloadLocation;
             Debug.WriteLine("Downloading to: " + downloadLocation);
             await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(downloadLocation + @"\" + jMessage.Value<String>("fileName")), await this.client.Read());
             Console.WriteLine("Received file");

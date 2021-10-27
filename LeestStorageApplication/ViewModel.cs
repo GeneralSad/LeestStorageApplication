@@ -1,10 +1,12 @@
 ﻿using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
+using Syroot.Windows.IO;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -29,6 +31,11 @@ namespace LeestStorageApplication
 
         private CommunicationHandler Handler { get; set; }
 
+        public IDirectoryItem SelectedItem { get; set; }
+        public ListView Listview { get; set; }
+        public bool PopupVisible { get; set; }
+        public string PopupFolderName { get; set; }
+
         public ViewModel()
         {
             this.Handler = new CommunicationHandler(this);
@@ -43,12 +50,8 @@ namespace LeestStorageApplication
             cCreateFolder = new DelegateCommand(CreateFolder);
 
             Items = new ObservableCollection<IDirectoryItem>();
-        }
 
-        public IDirectoryItem SelectedItem { get; set; }
-        public ListView Listview { get; set; }
-        public bool PopupVisible { get; set; }
-        public string PopupFolderName { get; set; }
+        }
 
         //Request to reload the file structure of the server
         public async void Reload()
@@ -59,11 +62,38 @@ namespace LeestStorageApplication
         //Request to download a file from the server
         public async void Download()
         {
-            int number = Items.IndexOf(SelectedItem);
-            if(number != -1)
+
+            if(SelectedItem != null && SelectedItem.Name.Contains("."))
             {
-                await this.Handler.DownloadRequest(this.Items[number].Name);
+
+                string DownloadPath = new KnownFolder(KnownFolderType.Downloads).Path;
+
+                using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
+                {
+
+                    fbd.ShowNewFolderButton = true;
+                    System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+
+                    if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        DownloadPath = fbd.SelectedPath;
+
+                        int number = Items.IndexOf(SelectedItem);
+                        if (number != -1)
+                        {
+                            await this.Handler.DownloadRequest(this.Items[number].Name, DownloadPath);
+                        }
+
+                    }
+
+                }
+
             }
+            else
+            {
+                Debug.WriteLine("Is not downloadable");
+            }
+
         }
 
         //Upload a file to the server
@@ -73,7 +103,7 @@ namespace LeestStorageApplication
             OpenFileDialog.Title = "Select file to upload";
             OpenFileDialog.Multiselect = false;
             OpenFileDialog.ValidateNames = true;
-            Nullable<bool> result = OpenFileDialog.ShowDialog();
+            bool? result = OpenFileDialog.ShowDialog();
 
             if (result == true)
             {

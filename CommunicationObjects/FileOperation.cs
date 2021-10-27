@@ -40,7 +40,10 @@ namespace CommunicationObjects
             int i = 0;
             foreach (string file in files)
             {
-                DirectoryFile directoryFile = new DirectoryFile(file.Substring(file.LastIndexOf(@"\") + 1), "", File.GetLastWriteTime(file));
+
+                string DetailInfo = "Created: " + File.GetCreationTime(file) + "\nLast Accessed: " + File.GetLastAccessTime(file);
+
+                DirectoryFile directoryFile = new DirectoryFile(file.Substring(file.LastIndexOf(@"\") + 1), DetailInfo , File.GetLastWriteTime(file));
                 directoryFiles[i] = directoryFile;
                 i++;
             }

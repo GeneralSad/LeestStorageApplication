@@ -6,7 +6,7 @@ namespace LeestStorageApplication
     {
         public string Name { get; set; }
         public DateTime LastChanged { get; set; }
-        public string DetailInfo { get; set; }
+        private string detailInfo { get; set; }
         public string LastChangedText { get; set; }
 
         public DirectoryFile(string name)
@@ -19,7 +19,31 @@ namespace LeestStorageApplication
             this.Name = name;
             this.DetailInfo = detailInfo;
             this.LastChanged = lastChanged;
-            this.LastChangedText = "Last changed: " + lastChanged.ToString();
+            this.LastChangedText = "Last Changed: " + lastChanged.ToString();
+        }
+
+        public string DetailInfo
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(detailInfo) && !detailInfo.Contains("Type: File"))
+                {
+                    return "Type: File\n" + detailInfo;
+                }
+                else if (detailInfo.Contains("Type: File"))
+                {
+                    return detailInfo;
+                }
+                else
+                {
+                    return "Type: File";
+                }
+                
+            }
+            set
+            {
+                this.detailInfo = value;
+            }
         }
 
     }
