@@ -23,12 +23,12 @@
             </RibbonSplitButton>
             <Button Command="{Binding cDelete}" Content="Delete" Margin="5,0,0,0"/>
 
-            <Popup IsOpen="{Binding PopupVisible}" Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Scroll">
+            <Popup IsOpen="{Binding PopupVisible}" Placement="MousePoint" AllowsTransparency="True" PopupAnimation="Slide">
                 <StackPanel Background="White">
                     <Label Content="Enter folder name" Background="White" Margin="5,5,5,5"/>
                     <TextBox Text="{Binding PopupFolderName}" Margin="5,0,5,5"/>
                     <Button Content="Create" Command="{ Binding cCreateFolder }" Margin="5,0,5,5"/>
-                    <Button Content="Cancel" Command="{ Binding cCreateFolder }" Margin="5,0,5,5"/>
+                    <Button Content="Cancel" Command="{ Binding cToggleCreateFolder }" Margin="5,0,5,5"/>
                 </StackPanel>
             </Popup>
 
