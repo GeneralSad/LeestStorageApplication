@@ -99,7 +99,6 @@ namespace LeestStorageApplication
 
         private async void Run()
         {
-
             await tcpClient.ConnectAsync(ServerAddress.IpAddress, ServerAddress.port);
 
             client = new Client(tcpClient);
@@ -141,7 +140,6 @@ namespace LeestStorageApplication
                 case "CloseConnection":
                     Disable();
                     break;
-
             }
         }
 

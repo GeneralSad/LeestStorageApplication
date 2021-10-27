@@ -6,11 +6,13 @@ namespace LeestStorageApplicationUnitTests
     [TestClass]
     public class ServerTests
     {
+
+
         [TestMethod]
         public void AddProtectedFileTest()
         {
             Server server = new Server();
-            string file = "testFile";
+            string file = "testAddProtectedFile";
             
             server.AddFileBeingEdited(file);
 
@@ -21,12 +23,14 @@ namespace LeestStorageApplicationUnitTests
         public void RemoveProtectedFileTest()
         {
             Server server = new Server();
-            string file = "testFile";
+            string file = "testRemoveProtectedFile";
 
             server.AddFileBeingEdited(file);
             server.RemoveFileBeingEdited(file);
 
             Assert.IsTrue(server.CheckIfFileIsClearToEdit(file));
         }
+
+
     }
 }

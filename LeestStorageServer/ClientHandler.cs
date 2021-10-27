@@ -19,7 +19,6 @@ namespace LeestStorageServer
         private DirectoryLayer directoryLayer;
         private ServerCallback callback;
 
-
         public ClientHandler(TcpClient tcpClient, ServerCallback callback)
         {
             this.tcpClient = tcpClient;

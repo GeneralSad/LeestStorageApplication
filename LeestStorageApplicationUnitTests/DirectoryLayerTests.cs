@@ -9,7 +9,7 @@ namespace LeestStorageApplicationUnitTests
     public class DirectoryLayerTests
     {
         [TestMethod]
-        public void DirectoryLayerDefaultValuesAreCorrect()
+        public void DirectoryLayerDefaultValuesAreCorrectTest()
         {
             DirectoryLayer directoryLayer = new DirectoryLayer();
 
@@ -19,7 +19,7 @@ namespace LeestStorageApplicationUnitTests
         }
 
         [TestMethod]
-        public void DirectoryLayerAddLayerMethodWorks()
+        public void DirectoryLayerAddLayerMethodTest()
         {
             DirectoryLayer directoryLayer = new DirectoryLayer();
             directoryLayer.AddDirectoryLayer(@"\ExtraLayer");
@@ -30,7 +30,7 @@ namespace LeestStorageApplicationUnitTests
         }
 
         [TestMethod]
-        public void DirectoryLayerRemoveLayerMethodWorks()
+        public void DirectoryLayerRemoveLayerMethodTest()
         {
             DirectoryLayer directoryLayer = new DirectoryLayer();
             directoryLayer.AddDirectoryLayer(@"\ExtraLayer");

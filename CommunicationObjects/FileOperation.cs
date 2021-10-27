@@ -58,7 +58,7 @@ namespace CommunicationObjects
                 // Determine whether the directory exists.
                 if (Directory.Exists(DirectoryPath))
                 {
-                    Console.WriteLine("That path exists already.");
+                    Console.WriteLine($"path '{DirectoryPath}' already exists.");
                     return;
                 }
 

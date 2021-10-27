@@ -12,6 +12,14 @@ namespace LeestStorageApplicationUnitTests
     [TestClass]
     public class FileOperationTests
     {
-        
+        [TestMethod]
+        public void DirectoryLayerDefaultValuesAreCorrect()
+        {
+            DirectoryLayer directoryLayer = new DirectoryLayer();
+
+            bool result = directoryLayer.CurrentDirectoryLayer.Equals(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\FilesForTransfer") && directoryLayer.Layer == 0;
+
+            Assert.IsTrue(result, "The wrong default values are assigned to the DirectoryLayer class");
+        }
     }
 }
