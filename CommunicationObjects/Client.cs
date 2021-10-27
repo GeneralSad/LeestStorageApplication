@@ -35,7 +35,6 @@ namespace LeestStorageServer
         {
             try
             {
-
                 await stream.WriteAsync(WrapMessage(Encoding.ASCII.GetBytes(ToJsonMessage(message))));
                 await stream.FlushAsync();
             }
