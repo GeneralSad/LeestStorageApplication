@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LeestStorageApplication
 {
-   
+
     public class DirectoryFolder : IDirectoryItem
     {
 
@@ -16,14 +12,14 @@ namespace LeestStorageApplication
 
         public DirectoryFolder(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public DirectoryFolder(string name, DateTime lastChanged)
         {
-            this.Name = name;
-            this.LastChanged = lastChanged;
-            this.LastChangedText = "Last Changed: " + lastChanged.ToString();
+            Name = name;
+            LastChanged = lastChanged;
+            LastChangedText = "Last Changed: " + lastChanged.ToString();
         }
 
         public string DetailInfo

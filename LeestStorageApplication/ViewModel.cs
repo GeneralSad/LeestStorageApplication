@@ -6,7 +6,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -38,7 +37,7 @@ namespace LeestStorageApplication
 
         public ViewModel()
         {
-            this.Handler = new CommunicationHandler(this);
+            Handler = new CommunicationHandler(this);
 
             cBack = new DelegateCommand(Back);
             cReload = new DelegateCommand(Reload);
@@ -56,7 +55,7 @@ namespace LeestStorageApplication
         //Request to reload the file structure of the server
         public async void Reload()
         {
-           await this.Handler.Reload();
+           await Handler.Reload();
         }
 
         //Request to download a file from the server
@@ -79,9 +78,10 @@ namespace LeestStorageApplication
                         DownloadPath = fbd.SelectedPath;
 
                         int number = Items.IndexOf(SelectedItem);
+
                         if (number != -1)
                         {
-                            await this.Handler.DownloadRequest(this.Items[number].Name, DownloadPath);
+                            await Handler.DownloadRequest(Items[number].Name, DownloadPath);
                         }
 
                     }
@@ -124,7 +124,7 @@ namespace LeestStorageApplication
         public async void CreateFolder()
         {
             PopupVisible = false;
-            await this.Handler.CreateFolderRequest(PopupFolderName);
+            await Handler.CreateFolderRequest(PopupFolderName);
             Debug.WriteLine("Creating: " + PopupFolderName);
             PopupFolderName = "";
         }
@@ -135,7 +135,7 @@ namespace LeestStorageApplication
             int number = Items.IndexOf(SelectedItem);
             if (number != -1)
             {
-                string fileName = this.Items[number].Name;
+                string fileName = Items[number].Name;
                 Debug.WriteLine($@"Delete: {number} {fileName}");
 
                 string messageBoxText;
@@ -155,7 +155,7 @@ namespace LeestStorageApplication
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
 
-                    await this.Handler.DeleteRequest(fileName);
+                    await Handler.DeleteRequest(fileName);
 
                 }
             }
@@ -168,11 +168,11 @@ namespace LeestStorageApplication
 
             if (number != -1)
             {
-                string directory = this.Items[number].Name;
+                string directory = Items[number].Name;
                 Debug.WriteLine("Enter: " + directory);
                 if (!directory.Contains("."))
                 {
-                   await this.Handler.IntoDirectoryRequest(directory);
+                   await Handler.IntoDirectoryRequest(directory);
                 }
             }
         }
@@ -180,18 +180,18 @@ namespace LeestStorageApplication
         //Navigate to the previous folder in the file path
         public async void Back()
         {
-            await this.Handler.OutOfDirectoryRequest();
+            await Handler.OutOfDirectoryRequest();
             Debug.WriteLine("Back");
         }
 
-        public void notify(ObservableCollection<IDirectoryItem> observable)
+        public void Notify(ObservableCollection<IDirectoryItem> observable)
         {
-            this.Items = observable;
+            Items = observable;
         }
 
         public async void Window_Closed(object sender, EventArgs e)
         {
-            await this.Handler.CloseConnection();
+            await Handler.CloseConnection();
 
         }
 

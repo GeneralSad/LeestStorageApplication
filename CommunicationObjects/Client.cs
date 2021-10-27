@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,7 +15,7 @@ namespace LeestStorageServer
         public Client(TcpClient client)
         {
             this.client = client;
-            this.stream = client.GetStream();
+            stream = client.GetStream();
         }
 
         //Wrap the message to make it ready to send
@@ -33,7 +31,7 @@ namespace LeestStorageServer
         }
 
         //Write the object
-        public async Task Write(Object message)
+        public async Task Write(object message)
         {
             try
             {
@@ -52,7 +50,6 @@ namespace LeestStorageServer
         {
             try
             {
-
                 await stream.WriteAsync(WrapMessage(message));
                 await stream.FlushAsync();
             }
@@ -65,7 +62,7 @@ namespace LeestStorageServer
         //Convert the object to json
         public static string ToJsonMessage<T>( T t)
         {
-            return JsonConvert.SerializeObject(t); 
+            return JsonConvert.SerializeObject(t);
         }
 
         //Read the stream for messages
@@ -81,7 +78,7 @@ namespace LeestStorageServer
             int bytesRead = 0;
             while (bytesRead < size)
             {
-                int read = await this.stream.ReadAsync(received, bytesRead, received.Length - bytesRead);
+                int read = await stream.ReadAsync(received, bytesRead, received.Length - bytesRead);
                 bytesRead += read;
                 //Console.WriteLine("ReadMessage: " + read);
             }
@@ -92,7 +89,7 @@ namespace LeestStorageServer
         //Terminate connection to the client
         public void Terminate()
         {
-            this.client.Close();
+            client.Close();
         }
     }
 }

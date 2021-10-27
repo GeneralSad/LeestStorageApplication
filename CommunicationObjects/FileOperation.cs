@@ -43,7 +43,7 @@ namespace CommunicationObjects
 
                 string DetailInfo = "Created: " + File.GetCreationTime(file) + "\nLast Accessed: " + File.GetLastAccessTime(file);
 
-                DirectoryFile directoryFile = new DirectoryFile(file.Substring(file.LastIndexOf(@"\") + 1), DetailInfo , File.GetLastWriteTime(file));
+                DirectoryFile directoryFile = new(file.Substring(file.LastIndexOf(@"\") + 1), DetailInfo, File.GetLastWriteTime(file));
                 directoryFiles[i] = directoryFile;
                 i++;
             }

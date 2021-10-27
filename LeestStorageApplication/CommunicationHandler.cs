@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -10,7 +9,6 @@ using CommunicationObjects;
 using LeestStorageServer;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Syroot.Windows.IO;
 
 namespace LeestStorageApplication
 {
@@ -25,7 +23,7 @@ namespace LeestStorageApplication
 
         public CommunicationHandler(ItemListCallback listener)
         {
-            this.tcpClient = new TcpClient();
+            tcpClient = new TcpClient();
             this.listener = listener;
             new Thread(Run).Start();
         }
@@ -33,34 +31,34 @@ namespace LeestStorageApplication
         //Send a message to the server
         public async Task SendMessage(object message)
         {
-           await this.client.Write(message);
+           await client.Write(message);
         }
 
         //Send a Request to reload
         public async Task Reload()
         {
-            await this.client.Write(new { type = "DirectoryRequest" });
+            await client.Write(new { type = "DirectoryRequest" });
             Debug.WriteLine("Reloaded");
         }
 
         //Send a request to delete a file or folder
         public async Task DeleteRequest(string fileName)
         {
-            await this.client.Write(new { type = "DeleteRequest", fileName });
+            await client.Write(new { type = "DeleteRequest", fileName });
             Debug.WriteLine("Download: " + fileName);
         }
 
         //Send a request to jump into a directory
         public async Task IntoDirectoryRequest(string directoryName)
         {
-            await this.client.Write(new { type = "IntoDirectoryRequest", directoryName });
+            await client.Write(new { type = "IntoDirectoryRequest", directoryName });
             Debug.WriteLine("Going into directory: " + directoryName);
         }
 
         //Send a request to jump into a directory
         public async Task OutOfDirectoryRequest()
         {
-            await this.client.Write(new { type = "OutOfDirectoryRequest" });
+            await client.Write(new { type = "OutOfDirectoryRequest" });
             Debug.WriteLine("Out of directory");
 
         }
@@ -69,8 +67,8 @@ namespace LeestStorageApplication
         public async Task DownloadRequest(string fileName, string downloadLocation)
         {
 
-            this.DownloadLocation = downloadLocation;
-            await this.client.Write(new {type = "FileRequest", fileName});
+            DownloadLocation = downloadLocation;
+            await client.Write(new { type = "FileRequest", fileName });
             Debug.WriteLine("Download: " + fileName);
 
         }
@@ -79,8 +77,8 @@ namespace LeestStorageApplication
         public async Task UploadRequest(string file)
         {
             byte[] fileToByteArray = await FileOperation.FileToByteArray(file);
-            await this.client.Write(new { type = "FileUploadRequest", fileName = file.Substring(file.LastIndexOf(@"\")) });
-            await this.client.Write(fileToByteArray);
+            await client.Write(new { type = "FileUploadRequest", fileName = file.Substring(file.LastIndexOf(@"\")) });
+            await client.Write(fileToByteArray);
             Debug.WriteLine("Upload: " + file);
         }
 
@@ -94,9 +92,9 @@ namespace LeestStorageApplication
         //Close the connection to the server
         public async Task CloseConnection()
         {
-            await this.client.Write(new { type = "CloseConnection"});
+            await client.Write(new { type = "CloseConnection"});
             Debug.WriteLine("Closing connection");
-            this.Disable();
+            Disable();
         }
 
         private async void Run()
@@ -104,10 +102,10 @@ namespace LeestStorageApplication
 
             await tcpClient.ConnectAsync(ServerAddress.IpAddress, ServerAddress.port);
 
-            this.client = new Client(tcpClient);
+            client = new Client(tcpClient);
 
-            await this.Reload();
-            this.Running = true;
+            await Reload();
+            Running = true;
             while (Running)
             {
                 try
@@ -149,11 +147,11 @@ namespace LeestStorageApplication
 
         private void Directory(JObject jMessage)
         {
-            ObservableCollection<IDirectoryItem> itemList = new ObservableCollection<IDirectoryItem>();
+            ObservableCollection<IDirectoryItem> itemList = new();
             foreach (JObject jobject in jMessage.Value<JArray>("files"))
             {
 
-                DirectoryFile file = new DirectoryFile(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged"));
+                DirectoryFile file = new(jobject.Value<string>("Name"), jobject.Value<string>("DetailInfo"), jobject.Value<DateTime>("LastChanged"));
                 string filename = file.Name.Substring(file.Name.LastIndexOf(@"\") + 1);
                 Debug.WriteLine(filename);
 
@@ -167,21 +165,21 @@ namespace LeestStorageApplication
                 }
 
             }
-            listener.notify(itemList);
+            listener.Notify(itemList);
             Debug.WriteLine("received Directory");
         }
 
         private async Task DirectoryFile(JObject jMessage)
         {
-            string downloadLocation = this.DownloadLocation;
+            string downloadLocation = DownloadLocation;
             Debug.WriteLine("Downloading to: " + downloadLocation);
-            await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(downloadLocation + @"\" + jMessage.Value<String>("fileName")), await this.client.Read());
+            await FileOperation.FileFromByteArray(FileOperation.ReturnAvailableFilePath(downloadLocation + @"\" + jMessage.Value<String>("fileName")), await client.Read());
             Console.WriteLine("Received file");
         }
 
         public void Disable()
         {
-            this.Running = false;
+            Running = false;
         }
 
     }

@@ -11,15 +11,15 @@ namespace LeestStorageApplication
 
         public DirectoryFile(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public DirectoryFile(string name, string detailInfo, DateTime lastChanged)
         {
-            this.Name = name;
-            this.DetailInfo = detailInfo;
-            this.LastChanged = lastChanged;
-            this.LastChangedText = "Last Changed: " + lastChanged.ToString();
+            Name = name;
+            DetailInfo = detailInfo;
+            LastChanged = lastChanged;
+            LastChangedText = "Last Changed: " + lastChanged.ToString();
         }
 
         public string DetailInfo
@@ -30,20 +30,13 @@ namespace LeestStorageApplication
                 {
                     return "Type: File\n" + detailInfo;
                 }
-                else if (detailInfo.Contains("Type: File"))
-                {
-                    return detailInfo;
-                }
                 else
                 {
-                    return "Type: File";
+                    return detailInfo.Contains("Type: File") ? detailInfo : "Type: File";
                 }
-                
+
             }
-            set
-            {
-                this.detailInfo = value;
-            }
+            set => detailInfo = value;
         }
 
     }

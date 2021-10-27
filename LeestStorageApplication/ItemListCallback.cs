@@ -9,6 +9,6 @@ namespace LeestStorageApplication
 {
     public interface ItemListCallback
     {
-        public abstract void notify(ObservableCollection<IDirectoryItem> observable);
+        public abstract void Notify(ObservableCollection<IDirectoryItem> observable);
     }
 }

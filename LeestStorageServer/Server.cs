@@ -16,41 +16,42 @@ namespace LeestStorageServer
         private TcpListener listener;
         private List<ClientHandler> clients;
 
-        public static List<string> ProtectedFiles = new List<string>();
+        public static List<string> ProtectedFiles = new();
 
-        private bool running { get; set; }
+        private bool Running { get; set; }
 
 
         public Server()
         {
-            this.clients = new List<ClientHandler>();
-            this.listener = new TcpListener(ServerAddress.IpAddress, ServerAddress.port);
+            clients = new List<ClientHandler>();
+            listener = new TcpListener(ServerAddress.IpAddress, ServerAddress.port);
         }
 
         public async Task Start()
         {
-            this.listener.Start();
+            listener.Start();
             Console.WriteLine($"Server is listening fort clients on port {ServerAddress.port}.");
-            this.running = true;
+            Running = true;
 
-            while (this.running)
+            while (Running)
             {
                 Console.WriteLine("Waiting for a new connection...");
 
                 try
                 {
-                    TcpClient client = await this.listener.AcceptTcpClientAsync().ConfigureAwait(false);
+                    TcpClient client = await listener.AcceptTcpClientAsync().ConfigureAwait(false);
                     Console.WriteLine($"A new client connected: {client}");
-                    this.clients.Add(new ClientHandler(client, this));
+                    clients.Add(new ClientHandler(client, this));
 
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     Debug.WriteLine(e.ToString());
                 }
 
             }
 
-            this.listener.Stop();
+            listener.Stop();
         }
 
         public void Disable()
@@ -59,12 +60,12 @@ namespace LeestStorageServer
             {
                 client.Disable();
             }
-            this.running = false;
+            Running = false;
         }
 
         public void RemoveClientHandlerFromList(ClientHandler handler)
         {
-            this.clients.Remove(handler);
+            clients.Remove(handler);
         }
 
         public async void RefreshDirectoryForAllClientsInDirectory(string directory)
