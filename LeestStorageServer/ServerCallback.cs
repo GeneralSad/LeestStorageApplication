@@ -2,7 +2,7 @@
 
 namespace LeestStorageServer
 {
-    interface ServerCallback
+    public interface ServerCallback
     {
         void RemoveClientHandlerFromList(ClientHandler handler);
 

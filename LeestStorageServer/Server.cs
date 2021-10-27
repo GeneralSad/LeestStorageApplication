@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using CommunicationObjects;
 using LeestStorageApplication;
 
 namespace LeestStorageServer
 {
-    class Server : ServerCallback
+    public class Server : ServerCallback
     {
         private TcpListener listener;
         private List<ClientHandler> clients;
 
-        public static List<string> ProtectedFiles = new();
+        private static List<string> ProtectedFiles = new List<string>();
 
         private bool Running { get; set; }
 

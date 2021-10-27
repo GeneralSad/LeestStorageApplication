@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LeestStorageServer
 {
-    class ClientHandler
+    public class ClientHandler
     {
         private TcpClient tcpClient;
         private Client client;
@@ -30,7 +30,7 @@ namespace LeestStorageServer
         }
 
         //Updates the directory if the current directory is equal to the given directory
-        public async Task UpdateDirectoryIfEqual(string directory, DirectoryFile[] files)
+        internal async Task UpdateDirectoryIfEqual(string directory, DirectoryFile[] files)
         {
             if (directoryLayer.CurrentDirectoryLayer == directory)
             {

@@ -18,4 +18,8 @@
     <PackageReference Include="System.IO.Abstractions" Version="13.2.47" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LeestStorageApplication\LeestStorageApplication.csproj" />
+  </ItemGroup>
+
 </Project>

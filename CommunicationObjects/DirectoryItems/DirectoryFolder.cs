@@ -17,9 +17,9 @@ namespace LeestStorageApplication
 
         public DirectoryFolder(string name, DateTime lastChanged)
         {
-            Name = name;
-            LastChanged = lastChanged;
-            LastChangedText = "Last Changed: " + lastChanged.ToString();
+            this.Name = name;
+            this.LastChanged = lastChanged;
+            this.LastChangedText = "Last changed: " + lastChanged;
         }
 
         public string DetailInfo
