@@ -169,10 +169,10 @@ namespace LeestStorageApplication
             if (number != -1)
             {
                 string directory = Items[number].Name;
-                Debug.WriteLine("Enter: " + directory);
                 if (!directory.Contains("."))
                 {
-                   await Handler.IntoDirectoryRequest(directory);
+                    Debug.WriteLine("Enter: " + directory);
+                    await Handler.IntoDirectoryRequest(directory);
                 }
             }
         }
@@ -192,7 +192,6 @@ namespace LeestStorageApplication
         public async void Window_Closed(object sender, EventArgs e)
         {
             await Handler.CloseConnection();
-
         }
 
     }
