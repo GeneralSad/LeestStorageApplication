@@ -8,10 +8,10 @@ namespace LeestStorageServer
 
         void RefreshDirectoryForAllClientsInDirectory(string directory);
 
-        bool CheckIfFileIsClearToEdit(string file);
+        bool CheckIfFileIsClearToEdit(string filePath);
 
-        void AddFileBeingEdited(string file);
+        void AddFileBeingEdited(string filePath);
 
-        void RemoveFileBeingEdited(string file);
+        void RemoveFileBeingEdited(string filePath);
     }
 }

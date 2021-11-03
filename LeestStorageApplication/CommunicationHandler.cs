@@ -85,7 +85,7 @@ namespace LeestStorageApplication
         //Send a request to create a folder
         public async Task CreateFolderRequest(string folderName)
         {
-            await this.client.Write(new { type = "CreateFolderRequest", folderName = folderName });
+            await client.Write(new { type = "CreateFolderRequest", folderName = folderName });
             Debug.WriteLine("Created folder: " + folderName);
         }
 
@@ -99,6 +99,7 @@ namespace LeestStorageApplication
 
         private async void Run()
         {
+
             await tcpClient.ConnectAsync(ServerAddress.IpAddress, ServerAddress.port);
 
             client = new Client(tcpClient);
@@ -140,6 +141,7 @@ namespace LeestStorageApplication
                 case "CloseConnection":
                     Disable();
                     break;
+
             }
         }
 

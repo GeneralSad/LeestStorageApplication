@@ -8,7 +8,6 @@ namespace CommunicationObjects
         public string CurrentDirectoryLayer { get; set; }
         public int Layer { get; private set; }
 
-
         public DirectoryLayer()
         {
             CurrentDirectoryLayer = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\FilesForTransfer";

@@ -76,19 +76,19 @@ namespace LeestStorageServer
             }
         }
 
-        public bool CheckIfFileIsClearToEdit(string file)
+        public bool CheckIfFileIsClearToEdit(string filePath)
         {
-            return !ProtectedFiles.Contains(file);
+            return !ProtectedFiles.Contains(filePath);
         }
 
-        public void AddFileBeingEdited(string file)
+        public void AddFileBeingEdited(string filePath)
         {
-            ProtectedFiles.Add(file);
+            ProtectedFiles.Add(filePath);
         }
 
-        public void RemoveFileBeingEdited(string file)
+        public void RemoveFileBeingEdited(string filePath)
         {
-            ProtectedFiles.Remove(file);
+            ProtectedFiles.Remove(filePath);
         }
     }
 }

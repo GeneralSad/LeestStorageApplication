@@ -13,13 +13,17 @@ namespace LeestStorageApplicationUnitTests
     public class FileOperationTests
     {
         [TestMethod]
-        public void DirectoryLayerDefaultValuesAreCorrect()
+        public async Task FilefromByteThrowsExceptionOnNullByteArrayTest()
         {
-            DirectoryLayer directoryLayer = new DirectoryLayer();
+            byte[] file = null;
 
-            bool result = directoryLayer.CurrentDirectoryLayer.Equals(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + @"\FilesForTransfer") && directoryLayer.Layer == 0;
+            await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await FileOperation.FileFromByteArray("_]a;';l#WrongDirectory", file), "A byte array was returned without a proper filePath");
+        }
 
-            Assert.IsTrue(result, "The wrong default values are assigned to the DirectoryLayer class");
+        [TestMethod]
+        public async Task FileToByteThrowsExceptionOnWrongFilePathTest()
+        {
+            await Assert.ThrowsExceptionAsync<FileNotFoundException>(async() => await FileOperation.FileToByteArray("_]a;';l#WrongDirectory"), "A byte array was returned without a proper filePath");
         }
     }
 }
